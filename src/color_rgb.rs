@@ -1,3 +1,4 @@
+use core::ops::Deref;
 use std::fmt::{Display, Error, Formatter};
 use std::result::Result;
 
@@ -28,8 +29,16 @@ impl Display for ColorRgb {
         write!(f, "{}, {}, {}", self.red, self.green, self.blue)
     }
 }
+
+impl Deref for ColorRgbPpm {
+    type Target = ColorRgb;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
 impl Display for ColorRgbPpm {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "{} {} {}", self.0.red, self.0.green, self.0.blue)
+        write!(f, "{} {} {}", self.red, self.green, self.blue)
     }
 }
