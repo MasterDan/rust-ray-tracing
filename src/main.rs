@@ -12,9 +12,9 @@ fn main() -> Result<(), Error> {
     let mut output = File::create(path)?;
     let image = PpmImage::new(256, 256, |x, y| {
         ColorRgb::new(
-            x.try_into().unwrap(),
             y.try_into().unwrap(),
-            (255 - y).try_into().unwrap(),
+            (255 - x).try_into().unwrap(),
+            (255.0 * 0.25) as u8,
         )
     });
     write!(output, "{}", image)?;
