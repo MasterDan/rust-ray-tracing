@@ -28,7 +28,9 @@ impl PpmImage {
 }
 impl Display for PpmImage {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "P3\n")?;
         write!(f, "{}\n", self.size)?;
+        write!(f, "{}\n", 255)?;
         for row in self.body.iter() {
             for (index, color) in row.iter().enumerate() {
                 if index < self.size.width.try_into().unwrap() {
