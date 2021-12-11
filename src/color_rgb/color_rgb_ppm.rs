@@ -13,6 +13,6 @@ impl Deref for ColorRgbPpm {
 
 impl Display for ColorRgbPpm {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "{} {} {}", self.red, self.green, self.blue)
+        write!(f, "{:3} {:3} {:3}", self.red, self.green, self.blue)
     }
 }
