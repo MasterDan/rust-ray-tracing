@@ -32,14 +32,9 @@ impl Display for PpmImage {
         write!(f, "{}\n", self.size)?;
         write!(f, "{}\n", 255)?;
         for row in self.body.iter() {
-            for (index, color) in row.iter().enumerate() {
-                if index < self.size.width.try_into().unwrap() {
-                    write!(f, "{}  ", color.to_ppm_format())?;
-                } else {
-                    write!(f, "{}\n", color.to_ppm_format())?;
-                }
+            for color in row.iter() {
+                write!(f, "{}\n", color.to_ppm_format())?;
             }
-            write!(f, "\n")?;
         }
         Ok(())
     }
