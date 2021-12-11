@@ -1,6 +1,7 @@
 use crate::color_rgb::ColorRgb;
 
 mod color_rgb;
+mod ppm_file;
 
 fn main() {
     let color = ColorRgb::new(255, 255, 0);
