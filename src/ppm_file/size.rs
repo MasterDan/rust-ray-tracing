@@ -1,4 +1,7 @@
 use core::fmt::Display;
+use std::fmt::Error;
+use std::fmt::Formatter;
+use std::result::Result;
 
 pub(crate) struct Size {
     pub height: u32,
@@ -15,7 +18,7 @@ impl Size {
 }
 
 impl Display for Size {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "{} {}", self.width, self.height)
     }
 }

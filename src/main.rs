@@ -10,10 +10,10 @@ mod ppm_file;
 fn main() -> Result<(), Error> {
     let path = "image.ppm";
     let mut output = File::create(path)?;
-    let image = PpmImage::new(256, 256, |x, y| {
+    let image = PpmImage::new(256, 256, |row, column| {
         ColorRgb::new(
-            y.try_into().unwrap(),
-            (255 - x).try_into().unwrap(),
+            column.try_into().unwrap(),
+            (255 - row).try_into().unwrap(),
             (255.0 * 0.25) as u8,
         )
     });
