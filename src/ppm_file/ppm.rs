@@ -1,5 +1,6 @@
 use super::size::Size;
 use crate::ColorRgb;
+use colored::*;
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use std::fmt::{Display, Error, Formatter};
@@ -43,13 +44,17 @@ impl Display for PpmImage {
             for (ci, color) in row.iter().enumerate() {
                 bar.inc(1);
                 bar.set_message(format!(
-                    " [ {:3} / {:3} ] [ {:3} / {:3} ]\r",
-                    ri, self.size.height, ci, self.size.width
+                    "{} | {:3} / {:3} | {:3} / {:3}\r",
+                    "Processing".truecolor(color.red, color.green, color.blue),
+                    ri,
+                    self.size.height,
+                    ci,
+                    self.size.width
                 ));
                 write!(f, "{}\n", color.to_ppm_format())?;
             }
         }
-        bar.finish_with_message("Done!");
+        bar.finish_with_message(format!("{}", "Done!".green()));
         Ok(())
     }
 }
