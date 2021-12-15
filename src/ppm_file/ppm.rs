@@ -1,5 +1,8 @@
 use super::size::Size;
 use crate::ColorRgb;
+use colored::*;
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
 use std::fmt::{Display, Error, Formatter};
 
 pub(crate) struct PpmImage {
@@ -31,11 +34,27 @@ impl Display for PpmImage {
         write!(f, "P3\n")?;
         write!(f, "{}\n", self.size)?;
         write!(f, "{}\n", 255)?;
-        for row in self.body.iter() {
-            for color in row.iter() {
+        let bar = ProgressBar::new((self.size.width * self.size.height).into());
+        bar.set_style(
+            ProgressStyle::default_bar()
+                .template("{spinner:.green} | {elapsed_precise} | {bar:40.cyan/blue} | {msg}")
+                .progress_chars("##-"),
+        );
+        for (ri, row) in self.body.iter().enumerate() {
+            for (ci, color) in row.iter().enumerate() {
+                bar.inc(1);
+                bar.set_message(format!(
+                    "{} | {:3} / {:3} | {:3} / {:3}\r",
+                    "Processing".truecolor(color.red, color.green, color.blue),
+                    ri,
+                    self.size.height,
+                    ci,
+                    self.size.width
+                ));
                 write!(f, "{}\n", color.to_ppm_format())?;
             }
         }
+        bar.finish_with_message(format!("{}", "Done!".green()));
         Ok(())
     }
 }
