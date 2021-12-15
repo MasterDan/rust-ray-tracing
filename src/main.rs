@@ -22,6 +22,5 @@ fn main() -> Result<(), Error> {
     });
     print!("Saving Image to ppm file\n");
     write!(image_file, "{}", image)?;
-    print!("Done!");
     Ok(())
 }
