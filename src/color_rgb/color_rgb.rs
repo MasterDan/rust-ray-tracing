@@ -1,4 +1,5 @@
 use core::ops::Add;
+use core::ops::Mul;
 use std::fmt::{Display, Error, Formatter};
 use std::result::Result;
 
@@ -41,6 +42,17 @@ impl Add for ColorRgb {
     }
 }
 
+impl Mul<f32> for ColorRgb {
+    type Output = Self;
+    fn mul(self, mult: f32) -> Self {
+        ColorRgb {
+            red: (self.red as f32 * mult) as u8,
+            green: (self.green as f32 * mult) as u8,
+            blue: (self.blue as f32 * mult) as u8,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::ColorRgb;
@@ -51,5 +63,11 @@ mod tests {
         let second = ColorRgb::new(4, 5, 6);
         let third = ColorRgb::new(5, 7, 9);
         assert_eq!(first + second, third);
+    }
+    #[test]
+    pub fn mul() {
+        let first = ColorRgb::new(1, 2, 3);
+        let second = ColorRgb::new(2, 4, 6);
+        assert_eq!(first * 2.0, second);
     }
 }
