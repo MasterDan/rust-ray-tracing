@@ -10,7 +10,7 @@ mod ppm_file;
 fn main() -> Result<(), Error> {
     let path = "image.ppm";
     let mut image_file = File::create(path)?;
-    let width = 256;
+    let width = 512;
     let height = 256;
     print!("Generating Image \n");
     let image = PpmImage::new(height, width, |row, column| {

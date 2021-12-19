@@ -16,9 +16,9 @@ impl PpmImage {
         T: Fn(u32, u32) -> ColorRgb,
     {
         let mut body: Vec<Vec<ColorRgb>> = Vec::new();
-        for i in 0..width {
+        for i in 0..height {
             let mut row: Vec<ColorRgb> = Vec::new();
-            for j in 0..height {
+            for j in 0..width {
                 row.push(init(i, j));
             }
             body.push(row);
