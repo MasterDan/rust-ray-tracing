@@ -105,9 +105,25 @@ mod tests {
     }
 
     #[test]
+    pub fn mul_assign() {
+        let mut first = ColorRgb::new(1, 2, 3);
+        first *= 2.0;
+        let second = ColorRgb::new(2, 4, 6);
+        assert_eq!(first, second);
+    }
+
+    #[test]
     pub fn div() {
         let first = ColorRgb::new(1, 2, 3);
         let second = ColorRgb::new(2, 4, 6);
         assert_eq!(second / 2.0, first);
+    }
+
+    #[test]
+    pub fn div_assign() {
+        let first = ColorRgb::new(1, 2, 3);
+        let mut second = ColorRgb::new(2, 4, 6);
+        second /= 2.0;
+        assert_eq!(second, first);
     }
 }
