@@ -1,5 +1,8 @@
 use core::ops::Add;
+use core::ops::Div;
+use core::ops::DivAssign;
 use core::ops::Mul;
+use core::ops::MulAssign;
 use std::fmt::{Display, Error, Formatter};
 use std::result::Result;
 
@@ -53,6 +56,36 @@ impl Mul<f32> for ColorRgb {
     }
 }
 
+impl MulAssign<f32> for ColorRgb {
+    fn mul_assign(&mut self, mul: f32) {
+        self.red = (self.red as f32 * mul) as u8;
+        self.green = (self.green as f32 * mul) as u8;
+        self.blue = (self.blue as f32 * mul) as u8;
+    }
+}
+
+impl Div<f32> for ColorRgb {
+    type Output = Self;
+    fn div(self, div: f32) -> Self {
+        if div == 0.0 {
+            panic!("Divide by Zero")
+        }
+        ColorRgb {
+            red: (self.red as f32 / div) as u8,
+            green: (self.green as f32 / div) as u8,
+            blue: (self.blue as f32 / div) as u8,
+        }
+    }
+}
+
+impl DivAssign<f32> for ColorRgb {
+    fn div_assign(&mut self, div: f32) {
+        self.red = (self.red as f32 / div) as u8;
+        self.green = (self.green as f32 / div) as u8;
+        self.blue = (self.blue as f32 / div) as u8;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::ColorRgb;
@@ -69,5 +102,12 @@ mod tests {
         let first = ColorRgb::new(1, 2, 3);
         let second = ColorRgb::new(2, 4, 6);
         assert_eq!(first * 2.0, second);
+    }
+
+    #[test]
+    pub fn div() {
+        let first = ColorRgb::new(1, 2, 3);
+        let second = ColorRgb::new(2, 4, 6);
+        assert_eq!(second / 2.0, first);
     }
 }
