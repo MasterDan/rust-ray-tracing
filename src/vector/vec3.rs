@@ -1,5 +1,7 @@
+use std::fmt::Formatter;
 use std::ops::AddAssign;
 use std::ops::{Add, Div, DivAssign, Mul, MulAssign};
+use std::fmt::{Display, Result};
 use crate::ColorRgb;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -9,18 +11,25 @@ pub(crate) struct Vec3 {
     z: f32,
 }
 
+impl Display for Vec3 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+    }
+}
+
 impl Vec3 {
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Vec3 { x, y, z }
     }
     pub fn to_color_rgb(self) -> ColorRgb {
         if [self.x, self.y, self.z].iter().any(|&x| x < 0f32 || x > 1f32) {
+            println!("vec3 is {}", self);
             panic!("Only vectors between zero and one can be converted")
         }
         ColorRgb {
-            red: (self.x / 255_f32) as u8,
-            green: (self.y / 255_f32) as u8,
-            blue: (self.z / 255_f32) as u8,
+            red: (self.x * 255_f32) as u8,
+            green: (self.y * 255_f32) as u8,
+            blue: (self.z * 255_f32) as u8,
         }
     }
 }

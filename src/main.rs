@@ -3,6 +3,7 @@ use crate::ppm_file::PpmImage;
 use std::fs::File;
 use std::io::Error;
 use std::io::Write;
+use crate::vector::Vec3;
 
 mod color_rgb;
 mod ppm_file;
@@ -11,15 +12,15 @@ mod vector;
 fn main() -> Result<(), Error> {
     let path = "image.ppm";
     let mut image_file = File::create(path)?;
-    let width = 256;
-    let height = 256;
+    let width = 512;
+    let height = 512;
     print!("Generating Image \n");
     let image = PpmImage::new(height, width, |row, column| {
-        ColorRgb::new(
-            ((column as f32 / (width as f32 - 1_f32)) * 255_f32) as u8,
-            (((height as f32 - row as f32) / (height as f32 - 1_f32)) * 255_f32) as u8,
-            (255.0 * 0.25) as u8,
-        )
+        Vec3::new(
+            column as f32 / (width - 1) as f32,
+            1.0 - (row as f32 / (height - 1) as f32),
+            0.25,
+        ).to_color_rgb()
     });
     print!("Saving Image to ppm file\n");
     write!(image_file, "{}", image)?;
