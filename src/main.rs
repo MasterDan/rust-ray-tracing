@@ -14,10 +14,11 @@ mod vector;
 
 fn main() -> Result<(), Error> {
     let settings = init_config();
-    let path = "image.ppm";
-    let mut image_file = File::create(path)?;
+    const ASPECT_RATIO: f32 = 16.0 / 9.0;
+    const PATH: &str = "image.ppm";
     let width = settings.get_int("image_width").unwrap() as u32;
-    let height = settings.get_int("image_height").unwrap() as u32;
+    let height = (width as f32 / ASPECT_RATIO) as u32;
+    let mut image_file = File::create(PATH)?;
     print!("Generating Image \n");
     let image = PpmImage::new(height, width, |row, column| {
         Vec3::new(
