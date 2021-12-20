@@ -1,2 +1,2 @@
 mod config;
-pub(crate) use self::config::Config;
+pub(crate) use self::config::init_config;

@@ -1,4 +1,5 @@
 use crate::color_rgb::ColorRgb;
+use crate::config::init_config;
 use crate::ppm_file::PpmImage;
 use crate::vector::Vec3;
 use std::fs::File;
@@ -6,15 +7,16 @@ use std::io::Error;
 use std::io::Write;
 
 mod color_rgb;
+mod config;
 mod ppm_file;
 mod vector;
-mod config;
 
 fn main() -> Result<(), Error> {
+    let settings = init_config();
     let path = "image.ppm";
     let mut image_file = File::create(path)?;
-    let width = 256;
-    let height = 256;
+    let width = settings.get_int("image_width").unwrap() as u32;
+    let height = settings.get_int("image_height").unwrap() as u32;
     print!("Generating Image \n");
     let image = PpmImage::new(height, width, |row, column| {
         Vec3::new(
