@@ -8,6 +8,7 @@ use std::io::Write;
 mod color_rgb;
 mod ppm_file;
 mod vector;
+mod config;
 
 fn main() -> Result<(), Error> {
     let path = "image.ppm";
