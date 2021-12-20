@@ -9,6 +9,7 @@ use std::io::Write;
 mod color_rgb;
 mod config;
 mod ppm_file;
+mod ray;
 mod vector;
 
 fn main() -> Result<(), Error> {
