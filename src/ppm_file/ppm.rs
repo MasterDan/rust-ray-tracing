@@ -29,6 +29,7 @@ impl PpmImage {
         }
     }
 }
+
 impl Display for PpmImage {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "P3\n")?;
