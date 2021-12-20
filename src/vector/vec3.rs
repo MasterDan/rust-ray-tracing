@@ -58,6 +58,17 @@ impl AddAssign<Vec3> for Vec3 {
     }
 }
 
+impl Mul for Vec3 {
+    type Output = Vec3;
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
+}
+
 impl Mul<f32> for Vec3 {
     type Output = Vec3;
 
@@ -105,6 +116,17 @@ impl Sub for Vec3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
+        }
+    }
+}
+
+impl Sub<f32> for Vec3 {
+    type Output = Vec3;
+    fn sub(self, minus: f32) -> Vec3 {
+        Vec3 {
+            x: self.x - minus,
+            y: self.y - minus,
+            z: self.z - minus,
         }
     }
 }
