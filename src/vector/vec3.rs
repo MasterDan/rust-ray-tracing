@@ -29,11 +29,11 @@ impl Vec3 {
             println!("vec3 is {}", self);
             panic!("Only vectors between zero and one can be converted")
         }
-        ColorRgb {
-            red: (self.x * 255_f32) as u8,
-            green: (self.y * 255_f32) as u8,
-            blue: (self.z * 255_f32) as u8,
-        }
+        ColorRgb::new(
+            (self.x * 255_f32) as u8,
+            (self.y * 255_f32) as u8,
+            (self.z * 255_f32) as u8,
+        )
     }
 }
 
