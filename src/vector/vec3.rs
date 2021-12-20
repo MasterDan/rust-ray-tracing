@@ -1,4 +1,5 @@
 use crate::ColorRgb;
+use core::ops::Sub;
 use std::fmt::Formatter;
 use std::fmt::{Display, Result};
 use std::ops::AddAssign;
@@ -6,9 +7,9 @@ use std::ops::{Add, Div, DivAssign, Mul, MulAssign};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct Vec3 {
-    x: f32,
-    y: f32,
-    z: f32,
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
 impl Display for Vec3 {
@@ -94,6 +95,17 @@ impl DivAssign<f32> for Vec3 {
         self.x /= rhs;
         self.y /= rhs;
         self.z /= rhs;
+    }
+}
+
+impl Sub for Vec3 {
+    type Output = Vec3;
+    fn sub(self, other: Vec3) -> Vec3 {
+        Vec3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
     }
 }
 
