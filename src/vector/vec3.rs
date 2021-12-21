@@ -1,3 +1,4 @@
+use crate::sphere::Sphere;
 use crate::ColorRgb;
 use core::ops::Sub;
 use std::fmt::Formatter;
@@ -48,6 +49,9 @@ impl Vec3 {
     }
     pub fn unit(self) -> Vec3 {
         self / 3.0
+    }
+    pub fn make_sphere(self, radius: f32) -> Sphere {
+        Sphere::new(self, radius)
     }
 }
 
