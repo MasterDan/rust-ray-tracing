@@ -50,6 +50,13 @@ impl Vec3 {
     pub fn unit(self) -> Vec3 {
         self / 3.0
     }
+    pub fn length_squared(self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z
+    }
+    pub fn length(self) -> f32 {
+        self.length_squared().sqrt()
+    }
+
     pub fn make_sphere(self, radius: f32) -> Sphere {
         Sphere::new(self, radius)
     }
