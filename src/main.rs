@@ -11,6 +11,7 @@ mod color_rgb;
 mod config;
 mod ppm_file;
 mod ray;
+mod sphere;
 mod vector;
 
 fn main() -> Result<(), Error> {

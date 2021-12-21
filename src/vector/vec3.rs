@@ -1,3 +1,4 @@
+use crate::sphere::Sphere;
 use crate::ColorRgb;
 use core::ops::Sub;
 use std::fmt::Formatter;
@@ -36,6 +37,22 @@ impl Vec3 {
             (self.z * 255_f32) as u8,
         )
     }
+    pub fn dot(u: Vec3, v: Vec3) -> f32 {
+        u.x * v.x + u.y * v.y + u.z * v.z
+    }
+    pub fn cross(u: Vec3, v: Vec3) -> Vec3 {
+        Vec3::new(
+            u.y * v.z - u.z * v.y,
+            u.z * v.x - u.x * v.z,
+            u.x * v.y - u.y * v.x,
+        )
+    }
+    pub fn unit(self) -> Vec3 {
+        self / 3.0
+    }
+    pub fn make_sphere(self, radius: f32) -> Sphere {
+        Sphere::new(self, radius)
+    }
 }
 
 impl Add<Vec3> for Vec3 {
@@ -55,6 +72,17 @@ impl AddAssign<Vec3> for Vec3 {
         self.x += rhs.x;
         self.y += rhs.y;
         self.z += rhs.z;
+    }
+}
+
+impl Mul for Vec3 {
+    type Output = Vec3;
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
     }
 }
 
@@ -105,6 +133,17 @@ impl Sub for Vec3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
+        }
+    }
+}
+
+impl Sub<f32> for Vec3 {
+    type Output = Vec3;
+    fn sub(self, minus: f32) -> Vec3 {
+        Vec3 {
+            x: self.x - minus,
+            y: self.y - minus,
+            z: self.z - minus,
         }
     }
 }
