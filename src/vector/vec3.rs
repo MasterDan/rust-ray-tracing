@@ -67,6 +67,18 @@ impl Add<Vec3> for Vec3 {
     }
 }
 
+impl Add<f32> for Vec3 {
+    type Output = Vec3;
+
+    fn add(self, ext: f32) -> Vec3 {
+        Vec3 {
+            x: ext + self.x,
+            y: ext + self.y,
+            z: ext + self.z,
+        }
+    }
+}
+
 impl AddAssign<Vec3> for Vec3 {
     fn add_assign(&mut self, rhs: Vec3) {
         self.x += rhs.x;
@@ -94,6 +106,17 @@ impl Mul<f32> for Vec3 {
             x: self.x * ext,
             y: self.y * ext,
             z: self.z * ext,
+        }
+    }
+}
+
+impl Mul<Vec3> for f32 {
+    type Output = Vec3;
+    fn mul(self, ext: Vec3) -> Self::Output {
+        Vec3 {
+            x: ext.x * self,
+            y: ext.y * self,
+            z: ext.z * self,
         }
     }
 }

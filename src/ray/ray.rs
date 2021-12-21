@@ -14,14 +14,15 @@ impl Ray {
         self.origin + self.direction * t
     }
     pub fn ray_color(self) -> ColorRgb {
-        if Vec3::new(0f32, 0f32, -1f32)
+        let t = Vec3::new(0f32, 0f32, -1f32)
             .make_sphere(0.5)
-            .hits_ray(&self)
-        {
-            return Vec3::new(1f32, 0f32, 0f32).to_color_rgb();
+            .hits_ray(&self);
+        if t > 0.0 {
+            let n = (self.at(t) - Vec3::new(0f32, 0f32, -1f32)).unit();
+            return (0.5 * (n + 1.0)).to_color_rgb();
         }
-        let t = 0.5 * (self.direction.y + 1.0);
-        let color = Vec3::new(1.0, 1.0, 1.0) * (1.0 - t) + Vec3::new(0.5, 0.7, 1.0) * t;
+        let t = 0.5 * (self.direction.unit().y + 1.0);
+        let color = (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.5, 0.7, 1.0);
         color.to_color_rgb()
     }
 }
