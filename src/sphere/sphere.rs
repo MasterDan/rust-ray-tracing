@@ -1,3 +1,5 @@
+use crate::sphere::hittable::Hittable;
+use crate::sphere::HitRecord;
 use crate::Ray;
 use crate::Vec3;
 
@@ -21,5 +23,11 @@ impl Sphere {
     }
     pub fn new(center: Vec3, radius: f32) -> Sphere {
         Sphere { center, radius }
+    }
+}
+
+impl Hittable for Sphere {
+    fn hit(self, _: &Ray, _: f32, _: f32, _: &HitRecord) -> bool {
+        todo!()
     }
 }

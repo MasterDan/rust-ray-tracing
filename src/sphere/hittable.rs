@@ -1,8 +1,6 @@
-use crate::Point3;
-use crate::Vec3;
+use crate::sphere::HitRecord;
+use crate::Ray;
 
-pub(crate) struct HitRecord {
-    pub p: Point3,
-    pub normal: Vec3,
-    t: f32,
+pub(crate) trait Hittable {
+    fn hit(self, ray: &Ray, t_min: f32, t_max: f32, hit_rec: &HitRecord) -> bool;
 }
