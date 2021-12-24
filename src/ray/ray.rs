@@ -11,8 +11,8 @@ impl Ray {
     pub fn new(origin: Point3, direction: Vec3) -> Ray {
         Ray { origin, direction }
     }
-    pub fn at(self, t: f32) -> Vec3 {
-        self.origin + t * self.direction
+    pub fn at(&self, t: f32) -> Point3 {
+        Point3(self.origin + t * self.direction)
     }
     pub fn ray_color(self) -> ColorRgb {
         let t = Vec3::new(0f32, 0f32, -1f32)
