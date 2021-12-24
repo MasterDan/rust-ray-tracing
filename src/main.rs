@@ -2,6 +2,7 @@ use crate::color_rgb::ColorRgb;
 use crate::config::init_config;
 use crate::ppm_file::PpmImage;
 use crate::ray::Ray;
+use crate::vector::Point3;
 use crate::vector::Vec3;
 use std::fs::File;
 use std::io::Error;
@@ -37,7 +38,7 @@ fn main() -> Result<(), Error> {
         let v = 1.0 - (row as f32 / (height - 1) as f32);
         let u = column as f32 / (width - 1) as f32;
         let ray = Ray::new(
-            origin,
+            Point3(origin),
             lower_left_corner + horizontal * u + vertical * v - origin,
         );
         ray.ray_color()
