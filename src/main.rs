@@ -9,6 +9,7 @@ use std::io::Write;
 
 mod color_rgb;
 mod config;
+mod hittable;
 mod ppm_file;
 mod ray;
 mod sphere;

@@ -1,4 +1,4 @@
-use crate::sphere::hit_record::HitRecord;
+use crate::hittable::hit_record::HitRecord;
 use crate::Ray;
 
 pub(crate) trait Hittable {
