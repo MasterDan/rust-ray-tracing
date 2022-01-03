@@ -1,5 +1,6 @@
 use crate::sphere::Sphere;
 use crate::ColorRgb;
+use core::ops::Neg;
 use core::ops::Sub;
 use std::fmt::Formatter;
 use std::fmt::{Display, Result};
@@ -125,6 +126,13 @@ impl Mul<Vec3> for f32 {
             y: ext.y * self,
             z: ext.z * self,
         }
+    }
+}
+
+impl Neg for Vec3 {
+    type Output = Vec3;
+    fn neg(self) -> Vec3 {
+        self * -1_f32
     }
 }
 
