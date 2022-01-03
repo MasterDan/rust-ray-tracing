@@ -1,7 +1,6 @@
-use crate::color_rgb::ColorRgb;
-use crate::config::init_config;
-use crate::ppm_file::PpmImage;
-use crate::ray::Ray;
+use crate::config::config::init_config;
+use crate::ppm_file::image::PpmImage;
+use crate::ray::ray::Ray;
 use crate::vector::Point3;
 use crate::vector::Vec3;
 use std::fs::File;

@@ -1,5 +1,5 @@
-use crate::sphere::Sphere;
-use crate::ColorRgb;
+use crate::color_rgb::color_rgb::ColorRgb;
+use crate::sphere::sphere::Sphere;
 use core::ops::Neg;
 use core::ops::Sub;
 use std::fmt::Formatter;

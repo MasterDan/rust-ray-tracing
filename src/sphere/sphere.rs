@@ -1,5 +1,5 @@
+use crate::sphere::hit_record::HitRecord;
 use crate::sphere::hittable::Hittable;
-use crate::sphere::HitRecord;
 use crate::Ray;
 use crate::Vec3;
 

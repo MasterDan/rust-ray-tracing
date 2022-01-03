@@ -88,7 +88,7 @@ impl DivAssign<f32> for ColorRgb {
 
 #[cfg(test)]
 mod tests {
-    use crate::ColorRgb;
+    use crate::color_rgb::color_rgb::ColorRgb;
 
     #[test]
     pub fn add() {

@@ -1,5 +1,5 @@
 use super::size::Size;
-use crate::ColorRgb;
+use crate::color_rgb::color_rgb::ColorRgb;
 use colored::*;
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;

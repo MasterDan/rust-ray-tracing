@@ -1,5 +1,5 @@
+use crate::color_rgb::color_rgb::ColorRgb;
 use crate::vector::Point3;
-use crate::ColorRgb;
 use crate::Vec3;
 
 pub(crate) struct Ray {
