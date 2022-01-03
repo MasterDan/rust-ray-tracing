@@ -35,7 +35,7 @@ fn main() -> Result<(), Error> {
     let mut image_file = File::create(PATH)?;
     print!("\nGenerating Image");
     let image = PpmImage::new(height, width, |row, column| {
-        let v = 1.0 - (row as f32 / (height - 1) as f32);
+        let v = 1.0 - row as f32 / (height - 1) as f32;
         let u = column as f32 / (width - 1) as f32;
         let ray = Ray::new(
             Point3(origin),
