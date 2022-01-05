@@ -1,6 +1,8 @@
 use crate::config::config::init_config;
+use crate::hittable::hittable_list::HittableList;
 use crate::ppm_file::image::PpmImage;
 use crate::ray::ray::Ray;
+use crate::sphere::sphere::Sphere;
 use crate::vector::Point3;
 use crate::vector::Vec3;
 use std::fs::File;
@@ -20,6 +22,10 @@ fn main() -> Result<(), Error> {
     let settings = init_config();
     const ASPECT_RATIO: f64 = 16.0 / 9.0;
     const PATH: &str = "image.ppm";
+
+    let mut world = HittableList::new();
+    world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5));
+    world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0));
 
     let width = settings.get_int("image_width").unwrap() as u32;
     let viewport_height = settings.get_float("viewport_height").unwrap();
@@ -42,7 +48,7 @@ fn main() -> Result<(), Error> {
             Point3(origin),
             lower_left_corner + horizontal * u + vertical * v - origin,
         );
-        ray.ray_color()
+        ray.ray_color(&world)
     });
     print!("\nSaving Image to ppm file\n");
     write!(image_file, "{}", image)?;

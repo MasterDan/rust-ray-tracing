@@ -18,7 +18,7 @@ impl Ray {
         Point3(self.origin + t * self.direction)
     }
     pub fn ray_color<T: Hittable>(self, world: &T) -> ColorRgb {
-        let hit_record = HitRecord::empty();
+        let mut hit_record = HitRecord::empty();
         if world.hit(&self, 0.0, INFINITY, &mut hit_record) {
             let vector = 0.5 * (hit_record.normal + Vec3::new(1.0, 1.0, 1.0));
             return vector.to_color_rgb();
