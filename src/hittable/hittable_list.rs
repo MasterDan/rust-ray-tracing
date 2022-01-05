@@ -4,9 +4,9 @@ use crate::Ray;
 use core::ops::Deref;
 use core::ops::DerefMut;
 
-pub(crate) struct HittableList(Vec<Box<dyn Hittable>>);
+pub(crate) struct HittableList<'a>(Vec<Box<dyn Hittable + 'a>>);
 
-impl HittableList {
+impl<'a> HittableList<'a> {
     pub fn clear(&mut self) {
         self.0.clear();
     }
@@ -15,12 +15,12 @@ impl HittableList {
         HittableList(Vec::new())
     }
 
-    pub fn add<T: Hittable + 'static>(&mut self, item: T) {
+    pub fn add<T: Hittable + 'a>(&mut self, item: T) {
         self.push(Box::new(item));
     }
 }
 
-impl Hittable for HittableList {
+impl Hittable for HittableList<'_> {
     fn hit(&self, r: &Ray, t_min: f32, t_max: f32, rec: &mut HitRecord) -> bool {
         let temp_rec = HitRecord::empty();
         let mut hit_anything = false;
@@ -37,15 +37,15 @@ impl Hittable for HittableList {
     }
 }
 
-impl Deref for HittableList {
-    type Target = Vec<Box<dyn Hittable>>;
-    fn deref(&self) -> &Vec<Box<dyn Hittable>> {
+impl<'a> Deref for HittableList<'a> {
+    type Target = Vec<Box<dyn Hittable + 'a>>;
+    fn deref(&self) -> &<Self as std::ops::Deref>::Target {
         &self.0
     }
 }
 
-impl DerefMut for HittableList {
-    fn deref_mut(&mut self) -> &mut Vec<Box<dyn Hittable>> {
+impl DerefMut for HittableList<'_> {
+    fn deref_mut(&mut self) -> &mut <Self as std::ops::Deref>::Target {
         &mut self.0
     }
 }
