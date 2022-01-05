@@ -11,15 +11,15 @@ impl Ray {
     pub fn new(origin: Point3, direction: Vec3) -> Ray {
         Ray { origin, direction }
     }
-    pub fn at(&self, t: f32) -> Point3 {
+    pub fn at(&self, t: f64) -> Point3 {
         Point3(self.origin + t * self.direction)
     }
     pub fn ray_color(self) -> ColorRgb {
-        let t = Vec3::new(0f32, 0f32, -1f32)
+        let t = Vec3::new(0f64, 0f64, -1f64)
             .make_sphere(0.5)
             .hits_ray(&self);
         if t > 0.0 {
-            let n = (self.at(t) - Vec3::new(0f32, 0f32, -1f32)).unit();
+            let n = (self.at(t) - Vec3::new(0f64, 0f64, -1f64)).unit();
             return (0.5 * (n + 1.0)).to_color_rgb();
         }
         let t = 0.5 * (self.direction.unit().y + 1.0);

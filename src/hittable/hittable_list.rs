@@ -21,7 +21,7 @@ impl<'a> HittableList<'a> {
 }
 
 impl Hittable for HittableList<'_> {
-    fn hit(&self, r: &Ray, t_min: f32, t_max: f32, rec: &mut HitRecord) -> bool {
+    fn hit(&self, r: &Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool {
         let temp_rec = HitRecord::empty();
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
