@@ -1,4 +1,4 @@
-use super::ColorRgb;
+use crate::color_rgb::color_rgb::ColorRgb;
 use core::ops::Deref;
 use std::fmt::{Display, Error, Formatter};
 

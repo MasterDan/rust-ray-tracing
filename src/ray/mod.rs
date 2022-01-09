@@ -1,2 +1,1 @@
-mod ray;
-pub(crate) use ray::Ray;
+pub(crate) mod ray;
