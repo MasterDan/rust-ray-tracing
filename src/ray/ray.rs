@@ -10,7 +10,18 @@ pub(crate) struct Ray {
     pub direction: Vec3,
 }
 
+type IsFrontFace = bool;
+type Normal = Vec3;
+
 impl Ray {
+    pub fn get_face_normal(&self, outward_normal: Vec3) -> (IsFrontFace, Normal) {
+        let front_face = self.direction.dot_with(outward_normal) < 0.0;
+        if front_face {
+            return (front_face, outward_normal);
+        } else {
+            return (front_face, -outward_normal);
+        }
+    }
     pub fn new(origin: Point3, direction: Vec3) -> Ray {
         Ray { origin, direction }
     }

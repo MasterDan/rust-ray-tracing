@@ -9,19 +9,7 @@ pub(crate) struct HitRecord {
     pub front_face: bool,
 }
 
-type IsFrontFace = bool;
-type Normal = Vec3;
-
 impl HitRecord {
-    pub fn set_face_normal(ray: &Ray, outward_normal: Vec3) -> (IsFrontFace, Normal) {
-        let front_face = ray.direction.dot_with(outward_normal) < 0.0;
-        if front_face {
-            return (front_face, outward_normal);
-        } else {
-            return (front_face, -outward_normal);
-        }
-    }
-
     pub fn empty() -> Self {
         HitRecord {
             p: Point3(Vec3::new(0.0, 0.0, 0.0)),

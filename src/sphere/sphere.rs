@@ -48,7 +48,7 @@ impl Hittable for Sphere {
         }
         let temp_point = ray.at(root);
         let outward_normal: Vec3 = (temp_point - self.center) / self.radius;
-        let (ff, norm) = HitRecord::set_face_normal(ray, outward_normal);
+        let (ff, norm) = ray.get_face_normal(outward_normal);
         let hit = HitRecord {
             t: root,
             p: temp_point,
