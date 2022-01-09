@@ -38,6 +38,11 @@ impl Vec3 {
             (self.z * 255_f64) as u8,
         )
     }
+
+    pub fn dot_with(self, other: Vec3) -> f64 {
+        Vec3::dot(self, other)
+    }
+
     pub fn dot(u: Vec3, v: Vec3) -> f64 {
         u.x * v.x + u.y * v.y + u.z * v.z
     }
