@@ -25,7 +25,7 @@ impl Ray {
         Ray { origin, direction }
     }
     pub fn at(&self, t: f64) -> Point3 {
-        Point3(self.origin + t * self.direction)
+        self.origin + t * self.direction
     }
     pub fn ray_color<T: Hittable>(self, world: &T) -> ColorRgb {
         if let Some(hit) = world.hit(&self, 0.0, INFINITY) {

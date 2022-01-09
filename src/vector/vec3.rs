@@ -14,6 +14,8 @@ pub(crate) struct Vec3 {
     pub z: f64,
 }
 
+pub(crate) type Point3 = Vec3;
+
 impl Display for Vec3 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(f, "({}, {}, {})", self.x, self.y, self.z)

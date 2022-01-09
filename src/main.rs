@@ -44,7 +44,7 @@ fn main() -> Result<(), Error> {
         let v = 1.0 - row as f64 / (height - 1) as f64;
         let u = column as f64 / (width - 1) as f64;
         let ray = Ray::new(
-            Point3(origin),
+            origin,
             lower_left_corner + horizontal * u + vertical * v - origin,
         );
         ray.ray_color(&world)

@@ -12,7 +12,7 @@ pub(crate) struct HitRecord {
 impl HitRecord {
     pub fn empty() -> Self {
         HitRecord {
-            p: Point3(Vec3::new(0.0, 0.0, 0.0)),
+            p: Vec3::new(0.0, 0.0, 0.0),
             normal: Vec3::new(0.0, 0.0, 0.0),
             t: 0.0,
             front_face: false,
