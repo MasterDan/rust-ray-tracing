@@ -1,5 +1,4 @@
 use crate::color_rgb::color_rgb::ColorRgb;
-use crate::hittable::hit_record::HitRecord;
 use crate::hittable::hittable::Hittable;
 use crate::vector::Point3;
 use crate::Vec3;
