@@ -65,7 +65,7 @@ impl Vec3 {
         self.length_squared().sqrt()
     }
 
-    pub fn make_sphere(self, radius: f64) -> Sphere {
+    pub fn with_radius(self, radius: f64) -> Sphere {
         Sphere::new(self, radius)
     }
 }
