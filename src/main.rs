@@ -8,6 +8,7 @@ use std::fs::File;
 use std::io::Error;
 use std::io::Write;
 
+mod camera;
 mod color_rgb;
 mod config;
 mod degrees;
@@ -21,7 +22,7 @@ mod vector;
 extern crate lazy_static;
 
 lazy_static! {
-    static ref SETTINGS: Settings = Settings::new();
+    pub static ref SETTINGS: Settings = Settings::new();
 }
 
 fn main() -> Result<(), Error> {
