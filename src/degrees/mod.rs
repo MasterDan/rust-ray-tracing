@@ -1,2 +1,2 @@
 mod degrees;
-pub(crate) use degrees::Degrees;
+pub(crate) use degrees::*;
