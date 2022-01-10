@@ -1,6 +1,6 @@
 use crate::hittable::hit_record::HitRecord;
-use crate::hittable::hittable::Hittable;
-use crate::Ray;
+use crate::hittable::Hittable;
+use crate::ray::Ray;
 use crate::Vec3;
 
 pub(crate) struct Sphere {

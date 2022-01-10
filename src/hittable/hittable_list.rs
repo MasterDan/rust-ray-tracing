@@ -1,6 +1,6 @@
 use crate::hittable::hit_record::HitRecord;
 use crate::hittable::hittable::Hittable;
-use crate::Ray;
+use crate::ray::Ray;
 use core::ops::Deref;
 use core::ops::DerefMut;
 

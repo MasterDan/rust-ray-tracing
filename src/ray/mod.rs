@@ -1,1 +1,2 @@
-pub(crate) mod ray;
+mod ray;
+pub(crate) use ray::*;

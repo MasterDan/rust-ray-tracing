@@ -1,3 +1,6 @@
 mod vec3;
-pub(crate) use vec3::Point3;
-pub(crate) use vec3::Vec3;
+
+#[cfg(test)]
+mod vec3_tests;
+
+pub(crate) use vec3::*;

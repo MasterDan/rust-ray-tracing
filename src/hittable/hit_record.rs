@@ -1,5 +1,4 @@
 use crate::Point3;
-use crate::Ray;
 use crate::Vec3;
 
 pub(crate) struct HitRecord {

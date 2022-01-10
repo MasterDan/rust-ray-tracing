@@ -1,5 +1,5 @@
-use crate::color_rgb::color_rgb::ColorRgb;
-use crate::hittable::hittable::Hittable;
+use crate::color_rgb::ColorRgb;
+use crate::hittable::Hittable;
 use crate::vector::Point3;
 use crate::Vec3;
 use core::f64::INFINITY;
