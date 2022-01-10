@@ -5,6 +5,9 @@ use crate::ppm_file::image::PpmImage;
 use crate::ray::Ray;
 use crate::vector::Point3;
 use crate::vector::Vec3;
+use colored::Colorize;
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
 use rand::Rng;
 use std::fs::File;
 use std::io::Error;
@@ -39,9 +42,14 @@ fn main() -> Result<(), Error> {
     let samples_per_pixel = SETTINGS.samples_per_pixel;
 
     let camera = Camera::new();
-
+    let bar = ProgressBar::new((width * height).into());
+    bar.set_style(
+        ProgressStyle::default_bar()
+            .template("{spinner:.green} | {elapsed_precise} | {bar:40.cyan/blue} | {msg}")
+            .progress_chars("##-"),
+    );
     let mut image_file = File::create(PATH)?;
-    print!("\nGenerating Image");
+    print!("\nGenerating Image\n\n");
     let image = PpmImage::new(height, width, |row, column| {
         let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
         let mut rng = rand::thread_rng();
@@ -51,9 +59,26 @@ fn main() -> Result<(), Error> {
             let ray = camera.get_ray(u, v);
             pixel_color += ray.ray_color(&world)
         }
-        pixel_color.scale(samples_per_pixel).to_color_rgb_safe()
+        let color = pixel_color.scale(samples_per_pixel).to_color_rgb_safe();
+        bar.inc(1);
+        bar.set_message(format!(
+            "{} | {:3} / {:3} | {:3} / {:3}\r",
+            "Processing".truecolor(color.red, color.green, color.blue),
+            row,
+            height,
+            column,
+            width
+        ));
+        color
     });
-    print!("\nSaving Image to ppm file\n");
+    bar.finish_with_message(format!("{}", "Colors Generated!".green()));
+    print!("\nSaving Image to ppm file:\n\n");
     write!(image_file, "{}", image)?;
+    print!(
+        "\n{}{}{}\n\n",
+        "Image saved into ".green(),
+        "Image.ppm".yellow(),
+        " file. Enjoy!".green()
+    );
     Ok(())
 }
