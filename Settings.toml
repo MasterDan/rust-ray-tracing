@@ -1,4 +1,5 @@
 image_width = 700
 viewport_height = 2.0
 focal_length = 1.0
+samples_per_pixel = 100
 aspect_ratio = "16 / 9"

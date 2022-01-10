@@ -1,9 +1,11 @@
+use crate::camera::Camera;
 use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
 use crate::ppm_file::image::PpmImage;
 use crate::ray::Ray;
 use crate::vector::Point3;
 use crate::vector::Vec3;
+use rand::Rng;
 use std::fs::File;
 use std::io::Error;
 use std::io::Write;
@@ -22,7 +24,7 @@ mod vector;
 extern crate lazy_static;
 
 lazy_static! {
-    pub static ref SETTINGS: Settings = Settings::new();
+    static ref SETTINGS: Settings = Settings::new();
 }
 
 fn main() -> Result<(), Error> {
@@ -34,26 +36,22 @@ fn main() -> Result<(), Error> {
 
     let width = SETTINGS.image_width;
     let height = SETTINGS.image_height;
-    let viewport_height = SETTINGS.viewport_height;
-    let focal_length = SETTINGS.focal_length;
-    let viewport_width = SETTINGS.viewport_width;
+    let samples_per_pixel = SETTINGS.samples_per_pixel;
 
-    let origin = Vec3::new(0.0, 0.0, 0.0);
-    let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_height, 0.0);
-    let lower_left_corner =
-        origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
+    let camera = Camera::new();
 
     let mut image_file = File::create(PATH)?;
     print!("\nGenerating Image");
     let image = PpmImage::new(height, width, |row, column| {
-        let v = 1.0 - row as f64 / (height - 1) as f64;
-        let u = column as f64 / (width - 1) as f64;
-        let ray = Ray::new(
-            origin,
-            lower_left_corner + horizontal * u + vertical * v - origin,
-        );
-        ray.ray_color(&world)
+        let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
+        let mut rng = rand::thread_rng();
+        for _ in 1..=samples_per_pixel {
+            let v = 1.0 - (row as f64 + rng.gen::<f64>()) / (height - 1) as f64;
+            let u = (column as f64 + rng.gen::<f64>()) / (width - 1) as f64;
+            let ray = camera.get_ray(u, v);
+            pixel_color += ray.ray_color(&world)
+        }
+        pixel_color.scale(samples_per_pixel).to_color_rgb_safe()
     });
     print!("\nSaving Image to ppm file\n");
     write!(image_file, "{}", image)?;
