@@ -1,13 +1,19 @@
-use crate::config::config::init_config;
+use crate::camera::Camera;
+use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
 use crate::ppm_file::image::PpmImage;
 use crate::ray::Ray;
 use crate::vector::Point3;
 use crate::vector::Vec3;
+use colored::Colorize;
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
+use rand::Rng;
 use std::fs::File;
 use std::io::Error;
 use std::io::Write;
 
+mod camera;
 mod color_rgb;
 mod config;
 mod degrees;
@@ -17,39 +23,62 @@ mod ray;
 mod sphere;
 mod vector;
 
+#[macro_use]
+extern crate lazy_static;
+
+lazy_static! {
+    static ref SETTINGS: Settings = Settings::new();
+}
+
 fn main() -> Result<(), Error> {
-    let settings = init_config();
-    const ASPECT_RATIO: f64 = 16.0 / 9.0;
     const PATH: &str = "image.ppm";
 
     let mut world = HittableList::new();
-    world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5));
-    world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0));
+    world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
+    world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
 
-    let width = settings.get_int("image_width").unwrap() as u32;
-    let viewport_height = settings.get_float("viewport_height").unwrap();
-    let focal_length = settings.get_float("focal_length").unwrap();
-    let viewport_width = ASPECT_RATIO * viewport_height;
+    let width = SETTINGS.image_width;
+    let height = SETTINGS.image_height;
+    let samples_per_pixel = SETTINGS.samples_per_pixel;
 
-    let origin = Vec3::new(0.0, 0.0, 0.0);
-    let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_height, 0.0);
-    let lower_left_corner =
-        origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
-
-    let height = (width as f64 / ASPECT_RATIO) as u32;
+    let camera = Camera::new();
+    let bar = ProgressBar::new((width * height).into());
+    bar.set_style(
+        ProgressStyle::default_bar()
+            .template("{spinner:.green} | {elapsed_precise} | {bar:40.cyan/blue} | {msg}")
+            .progress_chars("##-"),
+    );
     let mut image_file = File::create(PATH)?;
-    print!("\nGenerating Image");
+    print!("\nGenerating Image\n\n");
     let image = PpmImage::new(height, width, |row, column| {
-        let v = 1.0 - row as f64 / (height - 1) as f64;
-        let u = column as f64 / (width - 1) as f64;
-        let ray = Ray::new(
-            origin,
-            lower_left_corner + horizontal * u + vertical * v - origin,
-        );
-        ray.ray_color(&world)
+        let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
+        let mut rng = rand::thread_rng();
+        for _ in 1..=samples_per_pixel {
+            let v = 1.0 - (row as f64 + rng.gen::<f64>()) / (height - 1) as f64;
+            let u = (column as f64 + rng.gen::<f64>()) / (width - 1) as f64;
+            let ray = camera.get_ray(u, v);
+            pixel_color += ray.ray_color(&world)
+        }
+        let color = pixel_color.scale(samples_per_pixel).to_color_rgb_safe();
+        bar.inc(1);
+        bar.set_message(format!(
+            "{} | {:3} / {:3} | {:3} / {:3}\r",
+            "Processing".truecolor(color.red, color.green, color.blue),
+            row,
+            height,
+            column,
+            width
+        ));
+        color
     });
-    print!("\nSaving Image to ppm file\n");
+    bar.finish_with_message(format!("{}", "Colors Generated!".green()));
+    print!("\nSaving Image to ppm file:\n\n");
     write!(image_file, "{}", image)?;
+    print!(
+        "\n{}{}{}\n\n",
+        "Image saved into ".green(),
+        "Image.ppm".yellow(),
+        " file. Enjoy!".green()
+    );
     Ok(())
 }

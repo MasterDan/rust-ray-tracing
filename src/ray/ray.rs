@@ -27,15 +27,14 @@ impl Ray {
     pub fn at(&self, t: f64) -> Point3 {
         self.origin + t * self.direction
     }
-    pub fn ray_color<T: Hittable>(self, world: &T) -> ColorRgb {
+    pub fn ray_color<T: Hittable>(self, world: &T) -> Vec3 {
         if let Some(hit) = world.hit(&self, 0.0, INFINITY) {
             let vector = 0.5 * (hit.normal + Vec3::new(1.0, 1.0, 1.0));
-            return vector.to_color_rgb();
+            return vector;
         }
 
         let unit_direction = self.direction.unit();
         let t = 0.5 * (unit_direction.y + 1.0);
-        let vector = (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.5, 0.7, 1.0);
-        vector.to_color_rgb()
+        (1.0 - t) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.5, 0.7, 1.0)
     }
 }

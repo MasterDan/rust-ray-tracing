@@ -31,14 +31,48 @@ impl Vec3 {
             .iter()
             .any(|&x| x < 0f64 || x > 1f64)
         {
-            println!("vec3 is {}", self);
+            println!("\nvec3 is {}", self);
             panic!("Only vectors between zero and one can be converted")
         }
         ColorRgb::new(
-            (self.x * 255_f64) as u8,
-            (self.y * 255_f64) as u8,
-            (self.z * 255_f64) as u8,
+            (self.x * 255.999).round() as u8,
+            (self.y * 255.999).round() as u8,
+            (self.z * 255.999).round() as u8,
         )
+    }
+
+    pub fn scale(self, samples_per_pixel: u32) -> Vec3 {
+        let scale = 1f64 / (samples_per_pixel as f64);
+        self * scale
+    }
+
+    pub fn to_color_rgb_safe(self) -> ColorRgb {
+        self.clamp(0.0, 0.999).to_color_rgb()
+    }
+
+    pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
+        fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
+            if x < min {
+                return min;
+            }
+            if x > max {
+                return max;
+            }
+            return x;
+        }
+        Vec3 {
+            x: clamp_float(self.x, min, max),
+            y: clamp_float(self.y, min, max),
+            z: clamp_float(self.z, min, max),
+        }
+    }
+
+    pub fn round(&self) -> Vec3 {
+        Vec3 {
+            x: self.x.round(),
+            y: self.y.round(),
+            z: self.z.round(),
+        }
     }
 
     pub fn dot_with(self, other: Vec3) -> f64 {
@@ -65,7 +99,7 @@ impl Vec3 {
         self.length_squared().sqrt()
     }
 
-    pub fn make_sphere(self, radius: f64) -> Sphere {
+    pub fn with_radius(self, radius: f64) -> Sphere {
         Sphere::new(self, radius)
     }
 }
