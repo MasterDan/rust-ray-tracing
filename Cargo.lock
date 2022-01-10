@@ -227,6 +227,7 @@ dependencies = [
  "colored",
  "config",
  "indicatif",
+ "lazy_static",
 ]
 
 [[package]]

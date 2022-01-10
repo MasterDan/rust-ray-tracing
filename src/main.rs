@@ -1,4 +1,4 @@
-use crate::config::config::init_config;
+use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
 use crate::ppm_file::image::PpmImage;
 use crate::ray::Ray;
@@ -17,19 +17,25 @@ mod ray;
 mod sphere;
 mod vector;
 
+#[macro_use]
+extern crate lazy_static;
+
+lazy_static! {
+    static ref SETTINGS: Settings = Settings::new();
+}
+
 fn main() -> Result<(), Error> {
-    let settings = init_config();
-    const ASPECT_RATIO: f64 = 16.0 / 9.0;
     const PATH: &str = "image.ppm";
 
     let mut world = HittableList::new();
     world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5));
     world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0));
 
-    let width = settings.get_int("image_width").unwrap() as u32;
-    let viewport_height = settings.get_float("viewport_height").unwrap();
-    let focal_length = settings.get_float("focal_length").unwrap();
-    let viewport_width = ASPECT_RATIO * viewport_height;
+    let width = SETTINGS.image_width;
+    let height = SETTINGS.image_height;
+    let viewport_height = SETTINGS.viewport_height;
+    let focal_length = SETTINGS.focal_length;
+    let viewport_width = SETTINGS.viewport_width;
 
     let origin = Vec3::new(0.0, 0.0, 0.0);
     let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
@@ -37,7 +43,6 @@ fn main() -> Result<(), Error> {
     let lower_left_corner =
         origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
 
-    let height = (width as f64 / ASPECT_RATIO) as u32;
     let mut image_file = File::create(PATH)?;
     print!("\nGenerating Image");
     let image = PpmImage::new(height, width, |row, column| {
