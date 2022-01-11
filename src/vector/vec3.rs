@@ -2,6 +2,7 @@ use crate::color_rgb::ColorRgb;
 use crate::sphere::Sphere;
 use core::ops::Neg;
 use core::ops::Sub;
+use rand::Rng;
 use std::fmt::Formatter;
 use std::fmt::{Display, Result};
 use std::ops::AddAssign;
@@ -97,6 +98,27 @@ impl Vec3 {
     }
     pub fn length(self) -> f64 {
         self.length_squared().sqrt()
+    }
+
+    pub fn random() -> Vec3 {
+        let mut rng = rand::thread_rng();
+        Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>())
+    }
+
+    pub fn random_interval(min: f64, max: f64) -> Vec3 {
+        let mut rng = rand::thread_rng();
+        let koef = max - min;
+        Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>()) * koef
+    }
+
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_interval(-1.0, 1.0);
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
     }
 
     pub fn with_radius(self, radius: f64) -> Sphere {

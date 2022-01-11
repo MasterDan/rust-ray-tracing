@@ -8,6 +8,7 @@ pub(crate) struct Settings {
     pub focal_length: f64,
     pub aspect_ratio: f64,
     pub samples_per_pixel: u32,
+    pub max_depth: u32,
 }
 
 impl Settings {
@@ -15,6 +16,7 @@ impl Settings {
         let config = init_config();
         let width = config.get_int("image_width").unwrap_or(256) as u32;
         let samples_per_pixel = config.get_int("samples_per_pixel").unwrap_or(100) as u32;
+        let max_depth = config.get_int("max_depth").unwrap_or(50) as u32;
         let viewport_height = config.get_float("viewport_height").unwrap_or(2.0);
         let focal_length = config.get_float("focal_length").unwrap_or(1.0);
         let aspect_ratio = AspectRatioString(
@@ -32,6 +34,7 @@ impl Settings {
             focal_length,
             aspect_ratio,
             samples_per_pixel,
+            max_depth,
         }
     }
 }
