@@ -15,7 +15,6 @@ impl LazyColor {
             *self = LazyColor::Processing;
             *self = LazyColor::Color(init(row, col));
         }
-        todo!();
     }
 }
 
