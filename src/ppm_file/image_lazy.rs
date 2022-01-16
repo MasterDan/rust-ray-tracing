@@ -1,6 +1,7 @@
 use crate::color_rgb::ColorRgb;
 use crate::ppm_file::size::Size;
 use crate::PpmImage;
+use rayon::prelude::*;
 
 pub(crate) enum LazyColor {
     Position(u32, u32),
@@ -39,6 +40,11 @@ impl PpmImageLazy {
         }
     }
     pub fn calc<T: Fn(u32, u32) -> ColorRgb>(&mut self, init: T) -> PpmImage {
+        for row in self.body.iter_mut() {
+            row.par_iter_mut().for_each(|v| {
+                v.calc(init);
+            })
+        }
         todo!()
     }
 }
