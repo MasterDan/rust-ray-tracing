@@ -39,12 +39,35 @@ impl PpmImageLazy {
             body,
         }
     }
-    pub fn calc<T: Fn(u32, u32) -> ColorRgb>(&mut self, init: T) -> PpmImage {
+    pub fn calculate<T>(&mut self, init: T) -> PpmImage
+    where
+        T: Fn(u32, u32) -> ColorRgb + Send + Sync,
+    {
         for row in self.body.iter_mut() {
-            row.par_iter_mut().for_each(|v| {
-                v.calc(init);
-            })
+            row.par_iter_mut()
+                .for_each(|v| v.calc(|row, col| init(row, col)))
         }
-        todo!()
+        self.to_image()
+    }
+
+    fn to_image(&self) -> PpmImage {
+        let mut body: Vec<Vec<ColorRgb>> = Vec::new();
+        for r in self.body.iter() {
+            let row = r
+                .iter()
+                .map(|item| {
+                    if let LazyColor::Color(color_rgb) = *item {
+                        return color_rgb;
+                    } else {
+                        panic!("All colors must be counted!");
+                    }
+                })
+                .collect::<Vec<ColorRgb>>();
+            body.push(row);
+        }
+        PpmImage {
+            size: Size::new(self.size.height, self.size.width),
+            body,
+        }
     }
 }
