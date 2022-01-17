@@ -108,7 +108,7 @@ impl Vec3 {
     pub fn random_interval(min: f64, max: f64) -> Vec3 {
         let mut rng = rand::thread_rng();
         let koef = max - min;
-        Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>()) * koef
+        (min + Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>())) * koef
     }
 
     pub fn random_in_unit_sphere() -> Vec3 {
@@ -134,6 +134,18 @@ impl Add<Vec3> for Vec3 {
             x: ext.x + self.x,
             y: ext.y + self.y,
             z: ext.z + self.z,
+        }
+    }
+}
+
+impl Add<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn add(self, ext: Vec3) -> Vec3 {
+        Vec3 {
+            x: ext.x + self,
+            y: ext.y + self,
+            z: ext.z + self,
         }
     }
 }
@@ -234,6 +246,17 @@ impl Sub for Vec3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
+        }
+    }
+}
+
+impl Sub<Vec3> for f64 {
+    type Output = Vec3;
+    fn sub(self, vec: Vec3) -> Vec3 {
+        Vec3 {
+            x: self - vec.x,
+            y: self - vec.y,
+            z: self - vec.z,
         }
     }
 }
