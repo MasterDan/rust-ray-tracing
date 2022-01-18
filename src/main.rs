@@ -59,7 +59,7 @@ fn main() -> Result<(), Error> {
         for _ in 1..=samples_per_pixel {
             pixel_color += ray.ray_color(&world, SETTINGS.max_depth)
         }
-        let color = pixel_color.scale(samples_per_pixel).to_color_rgb_safe();
+        let color = pixel_color.to_color_rgb_safe();
         bar.inc(1);
         let pos = bar.position() as f64;
         let len = bar.length() as f64;
