@@ -35,23 +35,19 @@ impl Display for PpmImage {
         write!(f, "P3\n")?;
         write!(f, "{}\n", self.size)?;
         write!(f, "{}\n", 255)?;
-        let bar = ProgressBar::new((self.size.width * self.size.height).into());
+        let full_size = self.size.width * self.size.height;
+        let bar = ProgressBar::new((full_size).into());
         bar.set_style(
             ProgressStyle::default_bar()
-                .template("{spinner:.green} | {elapsed_precise} | {bar:40.cyan/blue} | {msg}")
+                .template("{spinner:.green} | {elapsed_precise} | {bar:50} | {msg}")
                 .progress_chars("##-"),
         );
         for (ri, row) in self.body.iter().enumerate() {
             for (ci, color) in row.iter().enumerate() {
                 bar.inc(1);
-                bar.set_message(format!(
-                    "{} | {:3} / {:3} | {:3} / {:3}\r",
-                    "Processing".truecolor(color.red, color.green, color.blue),
-                    ri,
-                    self.size.height,
-                    ci,
-                    self.size.width
-                ));
+                let percents =
+                    100.0 * (ri * (self.size.width as usize) + ci) as f64 / full_size as f64;
+                bar.set_message(format!("Processing | {:.1} %\r", percents));
                 write!(f, "{}\n", color.to_ppm_format())?;
             }
         }

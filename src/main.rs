@@ -46,10 +46,9 @@ fn main() -> Result<(), Error> {
     let bar = ProgressBar::new((width * height).into());
     bar.set_style(
         ProgressStyle::default_bar()
-            .template("{spinner:.green} | {elapsed_precise} | {bar:40.cyan/blue} | {pos:>7}/{len:7} | {msg}")
+            .template("{spinner:.green} | {elapsed_precise} | {bar:50} | {msg}")
             .progress_chars("##-"),
     );
-    let mut image_file = File::create(PATH)?;
     print!("\nGenerating Image\n\n");
     let image = PpmImageLazy::new(height, width).calculate(|row, column| {
         let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
@@ -62,14 +61,18 @@ fn main() -> Result<(), Error> {
         }
         let color = pixel_color.scale(samples_per_pixel).to_color_rgb_safe();
         bar.inc(1);
+        let pos = bar.position() as f64;
+        let len = bar.length() as f64;
         bar.set_message(format!(
-            "{}",
-            "Processing".truecolor(color.red, color.green, color.blue)
+            "{} | {:.1} %",
+            "Processing".truecolor(color.red, color.green, color.blue),
+            100.0 * pos / len
         ));
         color
     });
     bar.finish_with_message(format!("{}", "Colors Generated!".green()));
     print!("\nSaving Image to ppm file:\n\n");
+    let mut image_file = File::create(PATH).expect("Error: Cannot create file!");
     write!(image_file, "{}", image)?;
     print!(
         "\n{}{}{}\n\n",

@@ -48,7 +48,7 @@ impl Vec3 {
     }
 
     pub fn to_color_rgb_safe(self) -> ColorRgb {
-        self.clamp(0.0, 0.999).to_color_rgb()
+        self.clamp(0.0, 1.0).to_color_rgb()
     }
 
     pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
@@ -107,8 +107,11 @@ impl Vec3 {
 
     pub fn random_interval(min: f64, max: f64) -> Vec3 {
         let mut rng = rand::thread_rng();
-        let koef = max - min;
-        (min + Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>())) * koef
+        Vec3::new(
+            rng.gen_range(min..max),
+            rng.gen_range(min..max),
+            rng.gen_range(min..max),
+        )
     }
 
     pub fn random_in_unit_sphere() -> Vec3 {
