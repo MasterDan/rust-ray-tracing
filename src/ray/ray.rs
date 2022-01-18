@@ -1,7 +1,6 @@
 use crate::hittable::Hittable;
 use crate::vector::Point3;
 use crate::Vec3;
-use core::f64::INFINITY;
 
 pub(crate) struct Ray {
     pub origin: Point3,
@@ -30,7 +29,7 @@ impl Ray {
         if depth <= 0 {
             return Vec3::new(0.0, 0.0, 0.0);
         }
-        if let Some(hit) = world.hit(&self, 0.0, INFINITY) {
+        if let Some(hit) = world.hit(&self, 0.0, f64::MAX) {
             let target: Point3 = hit.p + hit.normal + Vec3::random_in_unit_sphere();
             return 0.5 * Ray::new(hit.p, target - hit.p).ray_color(world, depth - 1);
         }
