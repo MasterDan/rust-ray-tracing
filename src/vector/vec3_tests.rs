@@ -9,6 +9,15 @@ pub fn add() {
 }
 
 #[test]
+pub fn add_assign() {
+    let mut first = Vec3::new(1f64, 2f64, 3f64);
+    let second = Vec3::new(1f64, 1f64, 1f64);
+    let third = Vec3::new(2f64, 3f64, 4f64);
+    first += second;
+    assert_eq!(first, third);
+}
+
+#[test]
 pub fn mul() {
     let first = Vec3::new(1f64, 2f64, 3f64);
     let second = Vec3::new(2f64, 4f64, 6f64);
