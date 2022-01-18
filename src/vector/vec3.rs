@@ -52,7 +52,7 @@ impl Vec3 {
     }
 
     pub fn to_color_rgb_safe(self) -> ColorRgb {
-        self.clamp(0.0, 1.0).to_color_rgb()
+        self.clamp(0.0, 0.999).to_color_rgb()
     }
 
     pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
