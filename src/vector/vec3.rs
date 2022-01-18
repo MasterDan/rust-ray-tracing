@@ -44,7 +44,11 @@ impl Vec3 {
 
     pub fn scale(self, samples_per_pixel: u32) -> Vec3 {
         let scale = 1f64 / (samples_per_pixel as f64);
-        self * scale
+        Vec3 {
+            x: (self.x * scale).sqrt(),
+            y: (self.x * scale).sqrt(),
+            z: (self.x * scale).sqrt(),
+        }
     }
 
     pub fn to_color_rgb_safe(self) -> ColorRgb {
