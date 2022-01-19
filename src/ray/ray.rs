@@ -30,8 +30,11 @@ impl Ray {
             return Vec3::new(0.0, 0.0, 0.0);
         }
         if let Some(hit) = world.hit(self, 0.001, f64::MAX) {
-            let target: Point3 = hit.p + Vec3::random_in_hemisphere(hit.normal);
-            return 0.5 * Ray::new(hit.p, target - hit.p).ray_color(world, depth - 1);
+            if let Some((sc, at)) = hit.mat_ptr.scatter(self, &hit) {
+                return at * sc.ray_color(world, depth - 1);
+            } else {
+                return Vec3::new(0.0, 0.0, 0.0);
+            }
         }
 
         let unit_direction = self.direction.unit();

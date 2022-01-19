@@ -1,14 +1,17 @@
 use crate::hittable::hit_record::HitRecord;
 use crate::hittable::Hittable;
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::Vec3;
+use std::sync::Arc;
 
-pub(crate) struct Sphere {
+pub(crate) struct Sphere<'a> {
     pub center: Vec3,
     pub radius: f64,
+    pub mat_ptr: Arc<dyn Material + 'a>,
 }
 
-impl Sphere {
+impl<'a> Sphere<'a> {
     pub fn hits_ray(self, r: &Ray) -> f64 {
         let oc = r.origin - self.center;
         let a = r.direction.length_squared();
@@ -21,12 +24,16 @@ impl Sphere {
             (-half_b - discriminant.sqrt()) / a
         }
     }
-    pub fn new(center: Vec3, radius: f64) -> Sphere {
-        Sphere { center, radius }
+    pub fn new<T: Material + 'a>(center: Vec3, radius: f64, material: T) -> Sphere<'a> {
+        Sphere {
+            center,
+            radius,
+            mat_ptr: Arc::new(material),
+        }
     }
 }
 
-impl Hittable for Sphere {
+impl Hittable for Sphere<'_> {
     fn hit(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
         let oc = ray.origin - self.center;
         let a = ray.direction.length_squared();
@@ -54,6 +61,7 @@ impl Hittable for Sphere {
             p: temp_point,
             front_face: ff,
             normal: norm,
+            mat_ptr: self.mat_ptr.clone(),
         };
         Some(hit)
     }

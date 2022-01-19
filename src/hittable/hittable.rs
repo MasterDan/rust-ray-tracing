@@ -1,4 +1,5 @@
 use crate::hittable::hit_record::HitRecord;
+use crate::material::Material;
 use crate::ray::Ray;
 
 pub(crate) trait Hittable {
