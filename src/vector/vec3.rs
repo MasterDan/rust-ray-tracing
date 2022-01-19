@@ -23,6 +23,16 @@ impl Display for Vec3 {
     }
 }
 
+fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
+    if x < min {
+        return min;
+    }
+    if x > max {
+        return max;
+    }
+    return x;
+}
+
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { x, y, z }
@@ -36,10 +46,22 @@ impl Vec3 {
             panic!("Only vectors between zero and one can be converted")
         }
         ColorRgb::new(
-            (self.x * 255.999).round() as u8,
-            (self.y * 255.999).round() as u8,
-            (self.z * 255.999).round() as u8,
+            (self.x * 255_f64) as u8,
+            (self.y * 255_f64) as u8,
+            (self.z * 255_f64) as u8,
         )
+    }
+
+    fn to_color_rgb_dirty(self) -> ColorRgb {
+        ColorRgb {
+            red: self.x as u8,
+            green: self.y as u8,
+            blue: self.z as u8,
+        }
+    }
+
+    pub fn map_values<T: Fn(f64) -> f64>(self, map: T) -> Vec3 {
+        Vec3::new(map(self.x), map(self.y), map(self.z))
     }
 
     pub fn scale(self, samples_per_pixel: u32) -> Vec3 {
@@ -52,19 +74,11 @@ impl Vec3 {
     }
 
     pub fn to_color_rgb_safe(self) -> ColorRgb {
-        self.clamp(0.0, 0.999).to_color_rgb()
+        let result = self.map_values(|x| (255.999 * clamp_float(x, 0.0, 0.999)).round());
+        result.to_color_rgb_dirty()
     }
 
     pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
-        fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
-            if x < min {
-                return min;
-            }
-            if x > max {
-                return max;
-            }
-            return x;
-        }
         Vec3 {
             x: clamp_float(self.x, min, max),
             y: clamp_float(self.y, min, max),

@@ -35,8 +35,8 @@ fn main() -> Result<(), Error> {
     const PATH: &str = "image.ppm";
 
     let mut world = HittableList::new();
-    world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
-    world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
+    // world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
+    // world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
 
     let width = SETTINGS.image_width;
     let height = SETTINGS.image_height;
