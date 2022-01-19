@@ -8,12 +8,14 @@ use crate::Vec3;
 #[derive(Clone, Copy)]
 pub(crate) struct Metal {
     pub albedo: Vec3,
+    pub fuzz: f64,
 }
 
 impl Metal {
-    pub fn new(x: f64, y: f64, z: f64) -> Metal {
+    pub fn new(albedo: Vec3, fz: f64) -> Metal {
         Metal {
-            albedo: Vec3::new(x, y, z),
+            albedo,
+            fuzz: if fz < 1.0 { 1.0 } else { fz },
         }
     }
 }
@@ -25,7 +27,7 @@ impl Material for Metal {
         hit: &HitRecord<'_>,
     ) -> std::option::Option<(Scattered, Attenuation)> {
         let reflected = Vec3::reflect(ray.direction.unit(), hit.normal);
-        let scattered = Ray::new(hit.p, reflected);
+        let scattered = Ray::new(hit.p, reflected + self.fuzz * Vec3::random_in_unit_sphere());
         if Vec3::dot(scattered.direction, hit.normal) > 0.0 {
             return Some((scattered, self.albedo));
         } else {
