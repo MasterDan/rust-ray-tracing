@@ -35,8 +35,8 @@ fn main() -> Result<(), Error> {
     const PATH: &str = "image.ppm";
 
     let mut world = HittableList::new();
-    // world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
-    // world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
+    world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
+    world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
 
     let width = SETTINGS.image_width;
     let height = SETTINGS.image_height;
@@ -53,7 +53,7 @@ fn main() -> Result<(), Error> {
     let image = PpmImageLazy::new(height, width).calculate(|row, column| {
         let mut rng = rand::thread_rng();
         let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
-        for _ in 1..=samples_per_pixel {
+        for _ in 0..samples_per_pixel {
             let v = 1.0 - (row as f64 + rng.gen::<f64>()) / (height - 1) as f64;
             let u = (column as f64 + rng.gen::<f64>()) / (width - 1) as f64;
             let ray = camera.get_ray(u, v);
@@ -64,8 +64,10 @@ fn main() -> Result<(), Error> {
         let pos = bar.position() as f64;
         let len = bar.length() as f64;
         bar.set_message(format!(
-            "{} | {:.1} %",
+            "{} | {} -> {} | {:^6.2} %",
             "Processing".truecolor(color.red, color.green, color.blue),
+            pixel_color,
+            color,
             100.0 * pos / len
         ));
         color

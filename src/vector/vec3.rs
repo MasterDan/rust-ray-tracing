@@ -1,5 +1,6 @@
 use crate::color_rgb::ColorRgb;
 use crate::sphere::Sphere;
+use crate::SETTINGS;
 use core::ops::Neg;
 use core::ops::Sub;
 use rand::Rng;
@@ -19,7 +20,7 @@ pub(crate) type Point3 = Vec3;
 
 impl Display for Vec3 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+        write!(f, "({:>7.3}, {:>7.3}, {:>7.3})", self.x, self.y, self.z)
     }
 }
 
@@ -64,34 +65,14 @@ impl Vec3 {
         Vec3::new(map(self.x), map(self.y), map(self.z))
     }
 
-    pub fn scale(self, samples_per_pixel: u32) -> Vec3 {
-        let scale = 1f64 / (samples_per_pixel as f64);
-        Vec3 {
-            x: (self.x * scale).sqrt(),
-            y: (self.x * scale).sqrt(),
-            z: (self.x * scale).sqrt(),
-        }
-    }
-
     pub fn to_color_rgb_safe(self) -> ColorRgb {
-        let result = self.map_values(|x| (255.999 * clamp_float(x, 0.0, 0.999)).round());
+        let scale = 1.0 / SETTINGS.samples_per_pixel as f64;
+        let result = self.map_values(|x| {
+            let scaled = (x * scale).sqrt();
+            let result = 255.0 * clamp_float(scaled, 0.0, 1.0);
+            result.round()
+        });
         result.to_color_rgb_dirty()
-    }
-
-    pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
-        Vec3 {
-            x: clamp_float(self.x, min, max),
-            y: clamp_float(self.y, min, max),
-            z: clamp_float(self.z, min, max),
-        }
-    }
-
-    pub fn round(&self) -> Vec3 {
-        Vec3 {
-            x: self.x.round(),
-            y: self.y.round(),
-            z: self.z.round(),
-        }
     }
 
     pub fn dot_with(self, other: Vec3) -> f64 {
