@@ -1,4 +1,5 @@
 use crate::color_rgb::ColorRgb;
+use crate::material::Material;
 use crate::sphere::Sphere;
 use crate::SETTINGS;
 use core::ops::Neg;
@@ -81,6 +82,14 @@ impl Vec3 {
         self.length_squared().sqrt()
     }
 
+    pub fn near_zero(self) -> bool {
+        const s: f64 = 1e-8;
+        self.x.abs() < s && self.y.abs() < s && self.z.abs() < s
+    }
+    pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+        return v - 2.0 * Vec3::dot(v, n) * n;
+    }
+
     pub fn random() -> Vec3 {
         let mut rng = rand::thread_rng();
         Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>())
@@ -93,6 +102,10 @@ impl Vec3 {
             rng.gen_range(min..max),
             rng.gen_range(min..max),
         )
+    }
+
+    pub fn random_unit_vector() -> Vec3 {
+        Vec3::random_in_unit_sphere().unit()
     }
 
     pub fn random_in_unit_sphere() -> Vec3 {
@@ -114,8 +127,8 @@ impl Vec3 {
         }
     }
 
-    pub fn with_radius(self, radius: f64) -> Sphere {
-        Sphere::new(self, radius)
+    pub fn make_sphere<'a, T: Material + 'a>(self, radius: f64, material: T) -> Sphere<'a> {
+        Sphere::new(self, radius, material)
     }
 }
 

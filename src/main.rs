@@ -1,6 +1,8 @@
 use crate::camera::Camera;
 use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
+use crate::material::lambertian::Lambertian;
+use crate::material::metal::Metal;
 use crate::ppm_file::image::PpmImage;
 use crate::ppm_file::image_lazy::PpmImageLazy;
 use crate::ray::Ray;
@@ -35,9 +37,16 @@ lazy_static! {
 fn main() -> Result<(), Error> {
     const PATH: &str = "image.ppm";
 
+    let material_ground = Lambertian::new(0.8, 0.8, 0.0);
+    let material_center = Lambertian::new(0.7, 0.3, 0.3);
+    let material_left = Metal::new(0.8, 0.8, 0.8);
+    let material_right = Metal::new(0.8, 0.6, 0.2);
+
     let mut world = HittableList::new();
-    world.add(Vec3::new(0.0, 0.0, -1.0).with_radius(0.5));
-    world.add(Vec3::new(0.0, -100.5, -1.0).with_radius(100.0));
+    world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0, material_ground));
+    world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5, material_center));
+    world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(0.5, material_left));
+    world.add(Vec3::new(1.0, 0.0, -1.0).make_sphere(0.5, material_right));
 
     let width = SETTINGS.image_width;
     let height = SETTINGS.image_height;
