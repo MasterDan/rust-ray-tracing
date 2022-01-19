@@ -19,6 +19,7 @@ mod color_rgb;
 mod config;
 mod degrees;
 mod hittable;
+mod material;
 mod ppm_file;
 mod ray;
 mod sphere;
