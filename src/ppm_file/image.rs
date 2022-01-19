@@ -10,26 +10,6 @@ pub(crate) struct PpmImage {
     pub body: Vec<Vec<ColorRgb>>,
 }
 
-impl PpmImage {
-    pub(crate) fn new<T>(height: u32, width: u32, init: T) -> PpmImage
-    where
-        T: Fn(u32, u32) -> ColorRgb,
-    {
-        let mut body: Vec<Vec<ColorRgb>> = Vec::new();
-        for i in 0..height {
-            let mut row: Vec<ColorRgb> = Vec::new();
-            for j in 0..width {
-                row.push(init(i, j));
-            }
-            body.push(row);
-        }
-        PpmImage {
-            size: Size::new(height, width),
-            body: body,
-        }
-    }
-}
-
 impl Display for PpmImage {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "P3\n")?;

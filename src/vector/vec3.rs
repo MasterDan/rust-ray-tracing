@@ -38,27 +38,9 @@ impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { x, y, z }
     }
-    pub fn to_color_rgb(self) -> ColorRgb {
-        if [self.x, self.y, self.z]
-            .iter()
-            .any(|&x| x < 0f64 || x > 1f64)
-        {
-            println!("\nvec3 is {}", self);
-            panic!("Only vectors between zero and one can be converted")
-        }
-        ColorRgb::new(
-            (self.x * 255_f64) as u8,
-            (self.y * 255_f64) as u8,
-            (self.z * 255_f64) as u8,
-        )
-    }
 
     fn to_color_rgb_dirty(self) -> ColorRgb {
-        ColorRgb {
-            red: self.x as u8,
-            green: self.y as u8,
-            blue: self.z as u8,
-        }
+        ColorRgb::new(self.x as u8, self.y as u8, self.z as u8)
     }
 
     pub fn map_values<T: Fn(f64) -> f64>(self, map: T) -> Vec3 {
