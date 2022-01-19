@@ -6,7 +6,6 @@ pub(crate) struct Settings {
     pub viewport_height: f64,
     pub viewport_width: f64,
     pub focal_length: f64,
-    pub aspect_ratio: f64,
     pub samples_per_pixel: u32,
     pub max_depth: u32,
 }
@@ -32,7 +31,6 @@ impl Settings {
             viewport_height,
             viewport_width: aspect_ratio * viewport_height,
             focal_length,
-            aspect_ratio,
             samples_per_pixel,
             max_depth,
         }

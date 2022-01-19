@@ -30,7 +30,7 @@ impl ColorRgb {
 
 impl Display for ColorRgb {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "({}, {}, {})", self.red, self.green, self.blue)
+        write!(f, "({:3}, {:3}, {:3})", self.red, self.green, self.blue)
     }
 }
 

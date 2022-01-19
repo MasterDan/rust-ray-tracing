@@ -51,21 +51,23 @@ fn main() -> Result<(), Error> {
     );
     print!("\nGenerating Image\n\n");
     let image = PpmImageLazy::new(height, width).calculate(|row, column| {
-        let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
         let mut rng = rand::thread_rng();
-        let v = 1.0 - (row as f64 + rng.gen::<f64>()) / (height - 1) as f64;
-        let u = (column as f64 + rng.gen::<f64>()) / (width - 1) as f64;
-        let ray = camera.get_ray(u, v);
-        for _ in 1..=samples_per_pixel {
+        let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
+        for _ in 0..samples_per_pixel {
+            let v = 1.0 - (row as f64 + rng.gen::<f64>()) / (height - 1) as f64;
+            let u = (column as f64 + rng.gen::<f64>()) / (width - 1) as f64;
+            let ray = camera.get_ray(u, v);
             pixel_color += ray.ray_color(&world, SETTINGS.max_depth)
         }
-        let color = pixel_color.scale(samples_per_pixel).to_color_rgb_safe();
+        let color = pixel_color.to_color_rgb_safe();
         bar.inc(1);
         let pos = bar.position() as f64;
         let len = bar.length() as f64;
         bar.set_message(format!(
-            "{} | {:.1} %",
+            "{} | {} -> {} | {:^6.2} %",
             "Processing".truecolor(color.red, color.green, color.blue),
+            pixel_color,
+            color,
             100.0 * pos / len
         ));
         color

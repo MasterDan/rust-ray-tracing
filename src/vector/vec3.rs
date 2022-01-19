@@ -1,5 +1,6 @@
 use crate::color_rgb::ColorRgb;
 use crate::sphere::Sphere;
+use crate::SETTINGS;
 use core::ops::Neg;
 use core::ops::Sub;
 use rand::Rng;
@@ -19,61 +20,41 @@ pub(crate) type Point3 = Vec3;
 
 impl Display for Vec3 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+        write!(f, "({:>7.3}, {:>7.3}, {:>7.3})", self.x, self.y, self.z)
     }
+}
+
+fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
+    if x < min {
+        return min;
+    }
+    if x > max {
+        return max;
+    }
+    return x;
 }
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { x, y, z }
     }
-    pub fn to_color_rgb(self) -> ColorRgb {
-        if [self.x, self.y, self.z]
-            .iter()
-            .any(|&x| x < 0f64 || x > 1f64)
-        {
-            println!("\nvec3 is {}", self);
-            panic!("Only vectors between zero and one can be converted")
-        }
-        ColorRgb::new(
-            (self.x * 255.999).round() as u8,
-            (self.y * 255.999).round() as u8,
-            (self.z * 255.999).round() as u8,
-        )
+
+    fn to_color_rgb_dirty(self) -> ColorRgb {
+        ColorRgb::new(self.x as u8, self.y as u8, self.z as u8)
     }
 
-    pub fn scale(self, samples_per_pixel: u32) -> Vec3 {
-        let scale = 1f64 / (samples_per_pixel as f64);
-        self * scale
+    pub fn map_values<T: Fn(f64) -> f64>(self, map: T) -> Vec3 {
+        Vec3::new(map(self.x), map(self.y), map(self.z))
     }
 
     pub fn to_color_rgb_safe(self) -> ColorRgb {
-        self.clamp(0.0, 1.0).to_color_rgb()
-    }
-
-    pub fn clamp(&self, min: f64, max: f64) -> Vec3 {
-        fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
-            if x < min {
-                return min;
-            }
-            if x > max {
-                return max;
-            }
-            return x;
-        }
-        Vec3 {
-            x: clamp_float(self.x, min, max),
-            y: clamp_float(self.y, min, max),
-            z: clamp_float(self.z, min, max),
-        }
-    }
-
-    pub fn round(&self) -> Vec3 {
-        Vec3 {
-            x: self.x.round(),
-            y: self.y.round(),
-            z: self.z.round(),
-        }
+        let scale = 1.0 / SETTINGS.samples_per_pixel as f64;
+        let result = self.map_values(|x| {
+            let scaled = (x * scale).sqrt();
+            let result = 255.0 * clamp_float(scaled, 0.0, 1.0);
+            result.round()
+        });
+        result.to_color_rgb_dirty()
     }
 
     pub fn dot_with(self, other: Vec3) -> f64 {
@@ -91,7 +72,7 @@ impl Vec3 {
         )
     }
     pub fn unit(self) -> Vec3 {
-        self / 3.0
+        self / self.length()
     }
     pub fn length_squared(self) -> f64 {
         self.x * self.x + self.y * self.y + self.z * self.z
