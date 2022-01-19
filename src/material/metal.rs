@@ -15,7 +15,7 @@ impl Metal {
     pub fn new(albedo: Vec3, fz: f64) -> Metal {
         Metal {
             albedo,
-            fuzz: if fz < 1.0 { 1.0 } else { fz },
+            fuzz: if fz < 1.0 { fz } else { 1.0 },
         }
     }
 }
