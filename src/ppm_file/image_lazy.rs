@@ -5,14 +5,12 @@ use rayon::prelude::*;
 
 pub(crate) enum LazyColor {
     Position(u32, u32),
-    Processing,
     Color(ColorRgb),
 }
 
 impl LazyColor {
     pub fn calc<T: Fn(u32, u32) -> ColorRgb>(&mut self, init: T) {
         if let LazyColor::Position(row, col) = *self {
-            *self = LazyColor::Processing;
             *self = LazyColor::Color(init(row, col));
         }
     }

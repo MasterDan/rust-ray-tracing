@@ -95,7 +95,7 @@ impl Vec3 {
         )
     }
     pub fn unit(self) -> Vec3 {
-        self / 3.0
+        self / self.length()
     }
     pub fn length_squared(self) -> f64 {
         self.x * self.x + self.y * self.y + self.z * self.z
