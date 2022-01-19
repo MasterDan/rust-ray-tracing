@@ -51,7 +51,7 @@ impl Vec3 {
         let scale = 1.0 / SETTINGS.samples_per_pixel as f64;
         let result = self.map_values(|x| {
             let scaled = (x * scale).sqrt();
-            let result = 255.0 * clamp_float(scaled, 0.0, 1.0);
+            let result = 255.999 * clamp_float(scaled, 0.0, 0.999);
             result.round()
         });
         result.to_color_rgb_dirty()
@@ -102,6 +102,15 @@ impl Vec3 {
                 continue;
             }
             return p;
+        }
+    }
+
+    pub fn random_in_hemisphere(normal: Vec3) -> Vec3 {
+        let in_unit_sphere = Vec3::random_in_unit_sphere();
+        if Vec3::dot(in_unit_sphere, normal) > 0.0 {
+            return in_unit_sphere;
+        } else {
+            return -in_unit_sphere;
         }
     }
 
