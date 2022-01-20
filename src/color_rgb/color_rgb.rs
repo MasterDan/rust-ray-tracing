@@ -1,3 +1,5 @@
+use crate::Vec3;
+use crate::SETTINGS;
 use core::ops::Add;
 use core::ops::Div;
 use core::ops::DivAssign;
@@ -25,6 +27,25 @@ impl ColorRgb {
     }
     pub fn to_ppm_format(self) -> ColorRgbPpm {
         ColorRgbPpm(self)
+    }
+
+    pub fn from_vector_safe(vec: Vec3) -> Self {
+        fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
+            if x < min {
+                return min;
+            }
+            if x > max {
+                return max;
+            }
+            return x;
+        }
+        let scale = 1.0 / SETTINGS.samples_per_pixel as f64;
+        let result = vec.map_values(|x| {
+            let scaled = (x * scale).sqrt();
+            let result = 255.999 * clamp_float(scaled, 0.0, 0.999);
+            result.round()
+        });
+        result.to_color_rgb_dirty()
     }
 }
 

@@ -1,4 +1,5 @@
 use crate::camera::Camera;
+use crate::color_rgb::ColorRgb;
 use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
 use crate::material::dielectric::Dielectric;
@@ -66,7 +67,7 @@ fn main() -> Result<(), Error> {
             let ray = camera.get_ray(u, v);
             pixel_color += ray.ray_color(&world, SETTINGS.max_depth)
         }
-        let color = pixel_color.to_color_rgb_safe();
+        let color = ColorRgb::from_vector_safe(pixel_color);
         bar.inc(1);
         let pos = bar.position() as f64;
         let len = bar.length() as f64;

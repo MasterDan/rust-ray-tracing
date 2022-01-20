@@ -26,37 +26,17 @@ impl Display for Vec3 {
     }
 }
 
-fn clamp_float(x: f64, min: f64, max: f64) -> f64 {
-    if x < min {
-        return min;
-    }
-    if x > max {
-        return max;
-    }
-    return x;
-}
-
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { x, y, z }
     }
 
-    fn to_color_rgb_dirty(self) -> ColorRgb {
+    pub fn to_color_rgb_dirty(self) -> ColorRgb {
         ColorRgb::new(self.x as u8, self.y as u8, self.z as u8)
     }
 
     pub fn map_values<T: Fn(f64) -> f64>(self, map: T) -> Vec3 {
         Vec3::new(map(self.x), map(self.y), map(self.z))
-    }
-
-    pub fn to_color_rgb_safe(self) -> ColorRgb {
-        let scale = 1.0 / SETTINGS.samples_per_pixel as f64;
-        let result = self.map_values(|x| {
-            let scaled = (x * scale).sqrt();
-            let result = 255.999 * clamp_float(scaled, 0.0, 0.999);
-            result.round()
-        });
-        result.to_color_rgb_dirty()
     }
 
     pub fn dot_with(self, other: Vec3) -> f64 {
