@@ -1,0 +1,8 @@
+image_width = 400
+viewport_height = 2.0
+samples_per_pixel = 50
+aspect_ratio = "16 / 9"
+max_depth = 50
+vertical_field_of_view_in_degrees = 20.0
+aperture = 0.5
+dist_to_focus = 10.0
