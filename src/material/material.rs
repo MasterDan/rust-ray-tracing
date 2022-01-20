@@ -1,4 +1,4 @@
-use crate::hittable::hit_record::HitRecord;
+use crate::hittable::HitRecord;
 use crate::Ray;
 use crate::Vec3;
 

@@ -54,7 +54,12 @@ fn main() -> Result<(), Error> {
     let height = SETTINGS.image_height;
     let samples_per_pixel = SETTINGS.samples_per_pixel;
 
-    let camera = Camera::new();
+    let camera = Camera::new(
+        Point3::new(-2.0, 2.0, 1.0),
+        Point3::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        20.0,
+    );
     let bar = ProgressBar::new((width * height).into());
     bar.set_style(
         ProgressStyle::default_bar()

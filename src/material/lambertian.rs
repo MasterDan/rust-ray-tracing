@@ -1,4 +1,4 @@
-use crate::hittable::hit_record::HitRecord;
+use crate::hittable::HitRecord;
 use crate::material::material::Attenuation;
 use crate::material::material::Scattered;
 use crate::material::Material;
