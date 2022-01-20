@@ -5,7 +5,6 @@ use crate::hittable::hittable_list::HittableList;
 use crate::material::dielectric::Dielectric;
 use crate::material::lambertian::Lambertian;
 use crate::material::metal::Metal;
-use crate::ppm_file::image::PpmImage;
 use crate::ppm_file::image_lazy::ImageLazy;
 use crate::ray::Ray;
 use crate::vector::Point3;

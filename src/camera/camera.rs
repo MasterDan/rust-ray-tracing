@@ -12,7 +12,6 @@ pub(crate) struct Camera {
     lens_radius: f64,
     u: Vec3,
     v: Vec3,
-    w: Vec3,
 }
 
 impl Camera {
@@ -20,7 +19,7 @@ impl Camera {
         let theta = Degrees(SETTINGS.vfow).to_radians();
         let h = (theta / 2.0).tan();
         let viewport_height = SETTINGS.viewport_height * h;
-        let viewport_width = SETTINGS.aspect_ratio * viewport_height;
+        let viewport_width = SETTINGS.viewport_width;
 
         let w = (lookfrom - lookat).unit();
         let u = (Vec3::cross(vup, w)).unit();
@@ -36,7 +35,6 @@ impl Camera {
             lower_left_corner: origin - horizontal / 2.0 - vertical / 2.0 - focus_dist * w,
             u,
             v,
-            w,
             lens_radius: SETTINGS.aperture / 2.0,
         }
     }

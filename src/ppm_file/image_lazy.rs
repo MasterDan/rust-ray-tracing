@@ -1,6 +1,5 @@
 use crate::color_rgb::ColorRgb;
 use crate::ppm_file::size::Size;
-use crate::PpmImage;
 use rayon::prelude::*;
 use std::fs::File;
 use std::io::BufWriter;
@@ -52,26 +51,6 @@ impl ImageLazy {
 }
 
 impl ImageLazyCounted {
-    pub fn to_image_ppm(&self) -> PpmImage {
-        let mut body: Vec<Vec<ColorRgb>> = Vec::new();
-        for r in self.0.body.iter() {
-            let row = r
-                .iter()
-                .map(|item| {
-                    if let LazyColor::Color(color_rgb) = *item {
-                        return color_rgb;
-                    } else {
-                        panic!("All colors must be counted!");
-                    }
-                })
-                .collect::<Vec<ColorRgb>>();
-            body.push(row);
-        }
-        PpmImage {
-            size: Size::new(self.0.size.height, self.0.size.width),
-            body,
-        }
-    }
     pub fn save_as_png(&self, file: File) {
         let ref mut w = BufWriter::new(file);
 

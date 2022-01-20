@@ -5,8 +5,6 @@ pub(crate) struct Settings {
     pub image_height: u32,
     pub viewport_height: f64,
     pub viewport_width: f64,
-    pub aspect_ratio: f64,
-    pub focal_length: f64,
     pub vfow: f64,
     pub aperture: f64,
     pub samples_per_pixel: u32,
@@ -21,7 +19,6 @@ impl Settings {
         let samples_per_pixel = config.get_int("samples_per_pixel").unwrap_or(100) as u32;
         let max_depth = config.get_int("max_depth").unwrap_or(50) as u32;
         let viewport_height = config.get_float("viewport_height").unwrap_or(2.0);
-        let focal_length = config.get_float("focal_length").unwrap_or(1.0);
         let dist_to_focus = config.get_float("dist_to_focus").unwrap_or(20.0);
         let vfov = config
             .get_float("vertical_field_of_view_in_degrees")
@@ -39,8 +36,6 @@ impl Settings {
             image_height: (width as f64 / aspect_ratio) as u32,
             viewport_height,
             viewport_width: aspect_ratio * viewport_height,
-            aspect_ratio,
-            focal_length,
             samples_per_pixel,
             max_depth,
             vfow: vfov,
