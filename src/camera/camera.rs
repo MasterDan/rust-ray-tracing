@@ -19,7 +19,7 @@ impl Camera {
         let theta = Degrees(SETTINGS.vfow).to_radians();
         let h = (theta / 2.0).tan();
         let viewport_height = SETTINGS.viewport_height * h;
-        let viewport_width = SETTINGS.viewport_width;
+        let viewport_width = SETTINGS.aspect_ratio * viewport_height;
 
         let w = (lookfrom - lookat).unit();
         let u = (Vec3::cross(vup, w)).unit();
