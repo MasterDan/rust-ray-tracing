@@ -1,6 +1,7 @@
 use crate::camera::Camera;
 use crate::config::Settings;
 use crate::hittable::hittable_list::HittableList;
+use crate::material::dielectric::Dielectric;
 use crate::material::lambertian::Lambertian;
 use crate::material::metal::Metal;
 use crate::ppm_file::image::PpmImage;
@@ -38,14 +39,15 @@ fn main() -> Result<(), Error> {
     const PATH: &str = "image.ppm";
 
     let material_ground = Lambertian::new(0.8, 0.8, 0.0);
-    let material_center = Lambertian::new(0.7, 0.3, 0.3);
-    let material_left = Metal::new(Vec3::new(0.8, 0.8, 0.8), 0.3);
-    let material_right = Metal::new(Vec3::new(0.8, 0.6, 0.2), 1.0);
+    let material_center = Lambertian::new(0.1, 0.2, 0.5);
+    let material_left = Dielectric::new(1.5);
+    let material_right = Metal::new(Vec3::new(0.8, 0.6, 0.2), 0.0);
 
     let mut world = HittableList::new();
     world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0, material_ground));
     world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5, material_center));
     world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(0.5, material_left));
+    world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(-0.4, material_left));
     world.add(Vec3::new(1.0, 0.0, -1.0).make_sphere(0.5, material_right));
 
     let width = SETTINGS.image_width;
@@ -74,10 +76,8 @@ fn main() -> Result<(), Error> {
         let pos = bar.position() as f64;
         let len = bar.length() as f64;
         bar.set_message(format!(
-            "{} | {} -> {} | {:^6.2} %",
+            "{} | {:^6.2} %",
             "Processing".truecolor(color.red, color.green, color.blue),
-            pixel_color,
-            color,
             100.0 * pos / len
         ));
         color
