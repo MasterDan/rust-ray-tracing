@@ -4,6 +4,7 @@ use crate::sphere::Sphere;
 use crate::SETTINGS;
 use core::ops::Neg;
 use core::ops::Sub;
+use rand::thread_rng;
 use rand::Rng;
 use std::fmt::Formatter;
 use std::fmt::{Display, Result};
@@ -119,6 +120,17 @@ impl Vec3 {
     pub fn random_in_unit_sphere() -> Vec3 {
         loop {
             let p = Vec3::random_interval(-1.0, 1.0);
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
+    }
+
+    pub fn random_in_unit_disk() -> Vec3 {
+        loop {
+            let mut rnd = thread_rng();
+            let p = Vec3::new(rnd.gen(), rnd.gen_range(-1.0..1.0), 0.0);
             if p.length_squared() >= 1.0 {
                 continue;
             }
