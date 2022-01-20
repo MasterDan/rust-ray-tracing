@@ -1,7 +1,9 @@
-## Ray tracing in one weekend
+## Ray tracing in one weekend 
 ### written in [Rust](https://www.rust-lang.org/)
 
-Run app with `cargo run`. Wait till the process ends and see the result in `Image.ppm` file. It will look similiar to this one.
+[Link to original book](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+
+Run app with `cargo run`. Wait till the process ends and see the result in `Image.png` file. It will look similiar to this one.
 
 ![example](./example.png)
 
