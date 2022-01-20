@@ -1,8 +1,9 @@
-image_width = 700
+image_width = 800
 viewport_height = 2.0
 focal_length = 1.0
-samples_per_pixel = 100
+samples_per_pixel = 500
 aspect_ratio = "16 / 9"
 max_depth = 50
 vertical_field_of_view_in_degrees = 20.0
-aperture = 2.0
+aperture = 0.1
+dist_to_focus = 10.0

@@ -16,7 +16,7 @@ pub(crate) struct Camera {
 }
 
 impl Camera {
-    pub fn new(lookfrom: Point3, lookat: Point3, vup: Vec3) -> Self {
+    pub fn new(lookfrom: Point3, lookat: Point3, vup: Vec3, focus_dist: f64) -> Self {
         let theta = Degrees(SETTINGS.vfow).to_radians();
         let h = (theta / 2.0).tan();
         let viewport_height = SETTINGS.viewport_height * h;
@@ -26,7 +26,6 @@ impl Camera {
         let u = (Vec3::cross(vup, w)).unit();
         let v = Vec3::cross(w, u);
 
-        let focus_dist = (lookfrom - lookat).length();
         let origin = lookfrom;
         let horizontal = focus_dist * viewport_width * u;
         let vertical = focus_dist * viewport_height * v;

@@ -16,6 +16,10 @@ impl Lambertian {
             albedo: Vec3::new(x, y, z),
         }
     }
+
+    pub fn from_vector(v: Vec3) -> Lambertian {
+        Lambertian { albedo: v }
+    }
 }
 
 impl Material for Lambertian {
