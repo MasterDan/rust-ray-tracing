@@ -6,7 +6,7 @@ use crate::material::dielectric::Dielectric;
 use crate::material::lambertian::Lambertian;
 use crate::material::metal::Metal;
 use crate::ppm_file::image::PpmImage;
-use crate::ppm_file::image_lazy::PpmImageLazy;
+use crate::ppm_file::image_lazy::ImageLazy;
 use crate::ray::Ray;
 use crate::vector::Point3;
 use crate::vector::Vec3;
@@ -16,7 +16,6 @@ use indicatif::ProgressStyle;
 use rand::Rng;
 use std::fs::File;
 use std::io::Error;
-use std::io::Write;
 
 mod camera;
 mod color_rgb;
@@ -37,7 +36,7 @@ lazy_static! {
 }
 
 fn main() -> Result<(), Error> {
-    const PATH: &str = "image.ppm";
+    const PATH: &str = "image.png";
 
     let world = HittableList::new_random();
 
@@ -58,7 +57,7 @@ fn main() -> Result<(), Error> {
             .progress_chars("##-"),
     );
     print!("\nGenerating Image\n\n");
-    let image = PpmImageLazy::new(height, width).calculate(|row, column| {
+    let image = ImageLazy::new(height, width).calculate(|row, column| {
         let mut rng = rand::thread_rng();
         let mut pixel_color = Vec3::new(0.0, 0.0, 0.0);
         for _ in 0..samples_per_pixel {
@@ -79,13 +78,13 @@ fn main() -> Result<(), Error> {
         color
     });
     bar.finish_with_message(format!("{}", "Colors Generated!".green()));
-    print!("\nSaving Image to ppm file:\n\n");
-    let mut image_file = File::create(PATH).expect("Error: Cannot create file!");
-    write!(image_file, "{}", image)?;
+    print!("\nSaving Image to file:\n\n");
+    let image_file = File::create(PATH).expect("Error: Cannot create file!");
+    image.save_as_png(image_file);
     print!(
         "\n{}{}{}\n\n",
         "Image saved into ".green(),
-        "Image.ppm".yellow(),
+        "Image.png".yellow(),
         " file. Enjoy!".green()
     );
     Ok(())

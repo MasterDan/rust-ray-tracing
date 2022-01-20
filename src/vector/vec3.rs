@@ -1,7 +1,6 @@
 use crate::color_rgb::ColorRgb;
 use crate::material::Material;
 use crate::sphere::Sphere;
-use crate::SETTINGS;
 use core::ops::Neg;
 use core::ops::Sub;
 use rand::thread_rng;
@@ -118,7 +117,7 @@ impl Vec3 {
         }
     }
 
-    pub fn random_in_hemisphere(normal: Vec3) -> Vec3 {
+    pub fn _random_in_hemisphere(normal: Vec3) -> Vec3 {
         let in_unit_sphere = Vec3::random_in_unit_sphere();
         if Vec3::dot(in_unit_sphere, normal) > 0.0 {
             return in_unit_sphere;
