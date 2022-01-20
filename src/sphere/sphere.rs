@@ -1,4 +1,4 @@
-use crate::hittable::hit_record::HitRecord;
+use crate::hittable::HitRecord;
 use crate::hittable::Hittable;
 use crate::material::Material;
 use crate::ray::Ray;
@@ -12,18 +12,6 @@ pub(crate) struct Sphere<'a> {
 }
 
 impl<'a> Sphere<'a> {
-    pub fn hits_ray(self, r: &Ray) -> f64 {
-        let oc = r.origin - self.center;
-        let a = r.direction.length_squared();
-        let half_b = Vec3::dot(oc, r.direction);
-        let c = oc.length_squared() - self.radius * self.radius;
-        let discriminant = (half_b * half_b) - (a * c);
-        if discriminant < 0f64 {
-            -1.0
-        } else {
-            (-half_b - discriminant.sqrt()) / a
-        }
-    }
     pub fn new<T: Material + 'a>(center: Vec3, radius: f64, material: T) -> Sphere<'a> {
         Sphere {
             center,

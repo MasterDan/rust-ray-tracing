@@ -7,7 +7,7 @@ use core::ops::DerefMut;
 pub(crate) struct HittableList<'a>(Vec<Box<dyn Hittable + Send + Sync + 'a>>);
 
 impl<'a> HittableList<'a> {
-    pub fn clear(&mut self) {
+    pub fn _clear(&mut self) {
         self.0.clear();
     }
 
