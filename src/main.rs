@@ -13,6 +13,7 @@ use colored::Colorize;
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use rand::Rng;
+use std::f64::consts::PI;
 use std::fs::File;
 use std::io::Error;
 use std::io::Write;
@@ -40,21 +41,26 @@ fn main() -> Result<(), Error> {
 
     let material_ground = Lambertian::new(0.8, 0.8, 0.0);
     let material_center = Lambertian::new(0.1, 0.2, 0.5);
-    let material_left = Dielectric::new(1.5);
-    let material_right = Metal::new(Vec3::new(0.8, 0.6, 0.2), 0.0);
+    // let material_left = Dielectric::new(1.5);
+    // let material_right = Metal::new(Vec3::new(0.8, 0.6, 0.2), 0.0);
+    let r: f64 = (PI / 4.0).cos();
+    let material_left = Lambertian::new(0.0, 0.0, 1.0);
+    let material_right = Lambertian::new(1.0, 0.0, 0.0);
 
     let mut world = HittableList::new();
-    world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0, material_ground));
-    world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5, material_center));
-    world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(0.5, material_left));
-    world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(-0.4, material_left));
-    world.add(Vec3::new(1.0, 0.0, -1.0).make_sphere(0.5, material_right));
+    // world.add(Vec3::new(0.0, -100.5, -1.0).make_sphere(100.0, material_ground));
+    // world.add(Vec3::new(0.0, 0.0, -1.0).make_sphere(0.5, material_center));
+    // world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(0.5, material_left));
+    // world.add(Vec3::new(-1.0, 0.0, -1.0).make_sphere(-0.4, material_left));
+    // world.add(Vec3::new(1.0, 0.0, -1.0).make_sphere(0.5, material_right));
+    world.add(Vec3::new(-r, 0.0, -1.0).make_sphere(r, material_left));
+    world.add(Vec3::new(r, 0.0, -1.0).make_sphere(r, material_right));
 
     let width = SETTINGS.image_width;
     let height = SETTINGS.image_height;
     let samples_per_pixel = SETTINGS.samples_per_pixel;
 
-    let camera = Camera::new();
+    let camera = Camera::new(90.0);
     let bar = ProgressBar::new((width * height).into());
     bar.set_style(
         ProgressStyle::default_bar()
