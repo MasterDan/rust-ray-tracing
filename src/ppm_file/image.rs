@@ -20,6 +20,7 @@ impl Display for PpmImage {
         bar.set_style(
             ProgressStyle::default_bar()
                 .template("{spinner:.green} | {elapsed_precise} | {bar:50} | {msg}")
+                .expect("Cannot create progress bar")
                 .progress_chars("##-"),
         );
         for (ri, row) in self.body.iter().enumerate() {

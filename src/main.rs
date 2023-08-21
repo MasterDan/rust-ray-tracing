@@ -14,7 +14,7 @@ use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
 use rand::Rng;
 use std::fs::File;
-use std::io::Error;
+use std::io::Result;
 
 mod camera;
 mod color_rgb;
@@ -34,7 +34,7 @@ lazy_static! {
     static ref SETTINGS: Settings = Settings::new();
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<()> {
     const PATH: &str = "image.png";
 
     let world = HittableList::new_random();
@@ -53,6 +53,7 @@ fn main() -> Result<(), Error> {
     bar.set_style(
         ProgressStyle::default_bar()
             .template("{spinner:.green} | {elapsed_precise} | {bar:50} | {msg}")
+            .expect("Cannot create progress bar")
             .progress_chars("##-"),
     );
     print!("\nGenerating Image\n\n");
@@ -68,7 +69,7 @@ fn main() -> Result<(), Error> {
         let color = ColorRgb::from_vector_safe(pixel_color);
         bar.inc(1);
         let pos = bar.position() as f64;
-        let len = bar.length() as f64;
+        let len = bar.length().unwrap_or(0) as f64;
         bar.set_message(format!(
             "{} | {:^6.2} %",
             "Processing".truecolor(color.red, color.green, color.blue),

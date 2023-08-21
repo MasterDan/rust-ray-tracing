@@ -1,3 +1,5 @@
+use config::Config;
+
 use crate::config::aspect_ratio_string::AspectRatioString;
 
 pub(crate) struct Settings {
@@ -26,7 +28,7 @@ impl Settings {
         let aperture = config.get_float("aperture").unwrap_or(2.0);
         let aspect_ratio = AspectRatioString(
             config
-                .get_str("aspect_ratio")
+                .get_string("aspect_ratio")
                 .unwrap_or(String::from("16 / 9")),
         )
         .parse()
@@ -45,12 +47,9 @@ impl Settings {
     }
 }
 
-fn init_config() -> config::Config {
-    let mut settings = config::Config::default();
-    settings
-        .merge(config::File::with_name("Settings"))
-        .unwrap()
-        .merge(config::Environment::with_prefix("APP"))
-        .unwrap();
-    return settings;
+fn init_config() -> Config {
+    let settings = Config::builder()
+        .add_source(config::File::with_name("Settings"))
+        .add_source(config::Environment::with_prefix("APP"));
+    settings.build().expect("Cannot createConfig")
 }
